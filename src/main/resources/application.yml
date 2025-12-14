@@ -6,9 +6,9 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgres
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yml
 botcommands:
   core:
     packages: org.makson.guardbot
-#  liquibase:
-#    change-log: classpath:/db/changelog/db.changelog-master.yml
 

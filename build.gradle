@@ -33,7 +33,7 @@ dependencies {
     implementation "org.mapstruct:mapstruct:${versions.mapstruct}"
     implementation "io.github.freya022:BotCommands-spring:${versions.botcommands}"
     implementation "io.github.freya022:BotCommands:${versions.botcommands}"
-//    implementation 'org.springframework.boot:spring-boot-starter-liquibase'
+    implementation 'org.springframework.boot:spring-boot-starter-liquibase'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
