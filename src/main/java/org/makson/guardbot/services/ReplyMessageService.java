@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.makson.guardbot.dto.DepartmentDto;
 import org.makson.guardbot.dto.GuardsmanDto;
+import org.makson.guardbot.dto.ReportDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -50,27 +51,27 @@ public class ReplyMessageService {
                 .build();
     }
 
-//    public MessageEmbed createReportEmbed(ReportDto reportDto) {
-//        return new EmbedBuilder()
-//                .setTitle("Отчет от " + createReportDate())
-//                .setColor(0xFF0000)
-//                .setDescription("""
-//                                1. %s
-//                                2. %s
-//                                3. %s
-//
-//                                Дополнительные материалы:
-//                                %s
-//
-//                                """.formatted(
-//                                reportDto.names(),
-//                                reportDto.type(),
-//                                reportDto.description(),
-//                                reportDto.mediaUrl()
-//                        )
-//                )
-//                .build();
-//    }
+    public MessageEmbed createReportEmbed(ReportDto reportDto) {
+        return new EmbedBuilder()
+                .setTitle("Отчет от " + createReportDate())
+                .setColor(0xFF0000)
+                .setDescription("""
+                                1. %s
+                                2. %s
+                                3. %s
+                                
+                                Дополнительные материалы:
+                                %s
+                                
+                                """.formatted(
+                                String.join(" ", reportDto.names()),
+                                reportDto.type(),
+                                reportDto.description(),
+                                reportDto.mediaUrl()
+                        )
+                )
+                .build();
+    }
 
     private MessageEmbed createInfoEmbed(GuardsmanDto guardsman, String descriptionTemplate) {
         String faceIconUrl = "https://mc-heads.net/avatar/%s/128";

@@ -1,4 +1,4 @@
-package org.makson.guardbot.commamds.autocompletes;
+package org.makson.guardbot.commands.autocompletes;
 
 import io.github.freya022.botcommands.api.commands.application.ApplicationCommand;
 import io.github.freya022.botcommands.api.commands.application.slash.autocomplete.annotations.AutocompleteHandler;
@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Handler
-public class ReportTypeAutocomplete extends ApplicationCommand {
-    private static final List<String> TYPES = List.of(
-            "RP", "PvP", "Помощь игроку", "Штраф", "Другое"
+public class DepartmentAutocomplete extends ApplicationCommand {
+    private static final List<String> DEPARTMENTS = List.of(
+            "Отряд 'Санитаров'", "Отряд 'Эпсилон'", "Отряд 'Дельта'"
     );
 
-    public static final String REPORT_TYPE_AUTOCOMPLETE_NAME = "ReportType: type";
+    public static final String DEPARTMENT_AUTOCOMPLETE_NAME = "Department: department";
 
-    @AutocompleteHandler(REPORT_TYPE_AUTOCOMPLETE_NAME)
+    @AutocompleteHandler(DEPARTMENT_AUTOCOMPLETE_NAME)
     public Collection<String> onReportTypeAutocomplete(CommandAutoCompleteInteractionEvent event) {
-        return TYPES.stream()
+        return DEPARTMENTS.stream()
                 .filter(type ->
                         type.toLowerCase().contains(
                                 event.getFocusedOption().getValue().toLowerCase()
