@@ -11,14 +11,14 @@ import java.util.stream.Collectors;
 
 @Handler
 public class ReportTypeAutocomplete extends ApplicationCommand {
-    private static final List<String> TYPES = List.of(
-            "RP", "PvP", "Помощь игроку", "Штраф", "Другое"
-    );
-
     public static final String REPORT_TYPE_AUTOCOMPLETE_NAME = "ReportType: type";
 
     @AutocompleteHandler(REPORT_TYPE_AUTOCOMPLETE_NAME)
     public Collection<String> onReportTypeAutocomplete(CommandAutoCompleteInteractionEvent event) {
+        List<String> TYPES = List.of(
+                "RP", "PvP", "Помощь игроку", "Штраф", "Другое"
+        );
+
         return TYPES.stream()
                 .filter(type ->
                         type.toLowerCase().contains(

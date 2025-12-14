@@ -1,50 +1,42 @@
 package org.makson.guardbot.services;
 
 import io.github.freya022.botcommands.api.core.service.annotations.BService;
+import lombok.RequiredArgsConstructor;
+import org.makson.guardbot.ReportParser;
+import org.makson.guardbot.dto.GuardsmanCreatingDto;
+import org.makson.guardbot.dto.GuardsmanResponseDto;
 import org.makson.guardbot.dto.ReportDto;
-import org.makson.guardbot.exceptions.ReportParseException;
 
-import java.util.Arrays;
+import java.time.LocalDate;
 import java.util.List;
 
 @BService
+@RequiredArgsConstructor
 public class ReportService {
+    private final GuardsmanService guardsmanService;
+    private final ReportParser reportParser;
+
     public ReportDto create(ReportDto reportDto) {
+        List<String> guardsmen = reportParser.parseUsernames(reportDto.names().getFirst(), "Parameter 'usernames' is missing");
+
+
+        List<GuardsmanResponseDto> guardsmenDto = guardsmen.stream()
+                .map(guardsman ->
+                        guardsmanService.getGuardsman(reportParser.parseIdToUsernames(guardsman))
+                )
+                .toList();
+
+        guardsmenDto
+                .forEach(guardsman ->
+                        guardsmanService.updateLastReportDate(guardsman.name(), LocalDate.now()));
+
+
         return new ReportDto(
-                parseUsernames(reportDto.names().getFirst()),
-                parseReportType(reportDto.type()),
-                parseDescription(reportDto.description()),
-                parseMediaUrl(reportDto.mediaUrl()),
+                guardsmen,
+                reportParser.parseRequiredParameter(reportDto.type(), "Parameter 'type' is missing"),
+                reportParser.parseOptionalParameter(reportDto.description()),
+                reportParser.parseOptionalParameter(reportDto.mediaUrl()),
                 reportDto.media()
         );
-    }
-
-    private List<String> parseUsernames(String usernames) {
-        String[] usernameList = usernames.split("(?<=>)");
-        return Arrays.stream(usernameList)
-                .map(username -> username.replaceAll("[\\s,]+", ""))
-                .toList();
-    }
-
-    private String parseReportType(String type) {
-        if (type == null) {
-            throw new ReportParseException("Parameter 'type' is missing");
-        }
-
-        return type.toLowerCase();
-    }
-
-    private String parseDescription(String description) {
-        if (description == null) {
-            return "";
-        }
-        return description.toLowerCase();
-    }
-
-    private String parseMediaUrl(String mediaUrl) {
-        if (mediaUrl == null) {
-            return "";
-        }
-        return mediaUrl.toLowerCase();
     }
 }

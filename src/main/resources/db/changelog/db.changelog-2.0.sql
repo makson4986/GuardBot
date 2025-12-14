@@ -14,7 +14,7 @@ VALUES ('Стажер', 0, 0, 1),
        ('Зам. главы', -1, -1, 7),
        ('Глава гвардии', -1, -1, 8);
 
-INSERT INTO guardsmen(name, rank_id, points, special_reports, last_reports)
+INSERT INTO guardsmen(name, rank_id, points, special_report, last_report)
 VALUES ('Faust_Bismarkvil', 8, -1, -1, null),
        ('Mayzito', 7, -1, -1, null),
        ('MaksonLegend', 2, 17, 0, null);

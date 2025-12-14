@@ -3,6 +3,7 @@ package org.makson.guardbot.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +30,9 @@ public class Guardsman {
     private int points = 0;
 
     @Builder.Default
-    private int specialReports = 0;
+    private int specialReport = 0;
 
-    private LocalDateTime lastReports;
+    private LocalDate lastReport;
 
     @Builder.Default
     @OneToMany(

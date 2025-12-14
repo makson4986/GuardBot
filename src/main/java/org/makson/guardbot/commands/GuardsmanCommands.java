@@ -8,11 +8,10 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.SlashOption;
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.TopLevelSlashCommandData;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
-import org.makson.guardbot.dto.GuardsmanDto;
+import org.makson.guardbot.dto.GuardsmanResponseDto;
 import org.makson.guardbot.services.GuardsmanService;
 import org.makson.guardbot.services.ReplyMessageService;
 
@@ -56,7 +55,7 @@ public class GuardsmanCommands extends ApplicationCommand {
             return;
         }
 
-        GuardsmanDto guardsmanInfo = guardsmanService.getGuardsmanInfo(guardsman.getEffectiveName());
+        GuardsmanResponseDto guardsmanInfo = guardsmanService.getGuardsman(guardsman.getEffectiveName());
         MessageEmbed answer;
 
 

@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS guardsmen
     name            VARCHAR(64) UNIQUE NOT NULL,
     rank_id         INT                NOT NULL,
     points          INT DEFAULT 0,
-    special_reports INT DEFAULT 0,
-    last_reports    TIMESTAMP,
+    special_report INT DEFAULT 0,
+    last_report   DATE,
     FOREIGN KEY (rank_id) REFERENCES ranks (id)
 );
 --rollback DROP TABLE guardsman;

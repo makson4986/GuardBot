@@ -1,8 +1,7 @@
 package org.makson.guardbot.mappers;
 
-import org.makson.guardbot.dto.GuardsmanDto;
-import org.makson.guardbot.mappers.DepartmentMapper;
-import org.makson.guardbot.mappers.RankMapper;
+import org.makson.guardbot.dto.GuardsmanCreatingDto;
+import org.makson.guardbot.dto.GuardsmanResponseDto;
 import org.makson.guardbot.models.Guardsman;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,12 +14,13 @@ public interface GuardsmanMapper {
     @Mapping(target = "requiredPoints",
             source = "guardsman",
             qualifiedByName = "requiredPoints")
-    @Mapping(target = "requiredSpecialReports",
+    @Mapping(target = "requiredSpecialReport",
             source = "guardsman",
-            qualifiedByName = "requiredSpecialReports")
-    GuardsmanDto mapGuardsman(Guardsman guardsman);
+            qualifiedByName = "requiredSpecialReport")
+    GuardsmanResponseDto mapGuardsman(Guardsman guardsman);
+    Guardsman mapGuardsmanDto(GuardsmanCreatingDto guardsmanDto);
 
-    List<GuardsmanDto> mapGuardsmanList(List<Guardsman> guardsmen);
+    List<GuardsmanResponseDto> mapGuardsmanList(List<Guardsman> guardsmen);
 
 
     @Named("requiredPoints")
@@ -28,7 +28,7 @@ public interface GuardsmanMapper {
         return guardsman.getRank().getMaxPoints();
     }
 
-    @Named("requiredSpecialReports")
+    @Named("requiredSpecialReport")
     default int calcRequiredSpecialReports(Guardsman guardsman) {
         return guardsman.getRank().getMaxSpecialReports();
     }
