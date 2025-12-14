@@ -8,6 +8,7 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.SlashOption;
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.TopLevelSlashCommandData;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
@@ -34,10 +35,11 @@ public class GuardsmanCommands extends ApplicationCommand {
     }
 
     @JDASlashCommand(name = "guardsmen", subcommand = "info", description = "Получить подробную информацию")
-    public void onSlashGetInfo(GuildSlashEvent event,
-                               @Nullable
-                               @SlashOption(name = "guardsman", description = "Информацию кого необходимо получить")
-                               User user) {
+    public void onSlashGetInfo(
+            GuildSlashEvent event,
+            @Nullable
+            @SlashOption(name = "guardsman", description = "Информацию кого необходимо получить")
+            User user) {
 
         event.deferReply().queue();
         Member guardsman = event.getMember();
@@ -59,11 +61,53 @@ public class GuardsmanCommands extends ApplicationCommand {
 
 
         if (ADMIN_RANKS.contains(guardsmanInfo.rank().name())) {
-            answer = replyMessageService.createAdminEmbed(guardsmanInfo);
+            answer = replyMessageService.createAdminEmbed(guardsmanInfo, guardsman.getColor());
         } else {
-            answer = replyMessageService.createRankedEmbed(guardsmanInfo);
+            answer = replyMessageService.createRankedEmbed(guardsmanInfo, guardsman.getColor());
         }
 
         event.getHook().sendMessageEmbeds(answer).queue();
     }
+
+    @JDASlashCommand(name = "guardsmen", subcommand = "hire", description = "Нанять")
+    public void onSlashHireGuardsman(
+            GuildSlashEvent event,
+            @SlashOption(name = "guardsman", description = "Кого необходимо нанять") User guardsman
+    ) {
+
+    }
+
+    @JDASlashCommand(name = "guardsmen", subcommand = "dismiss", description = "Уволить")
+    public void onSlashDismissGuardsman(
+            GuildSlashEvent event,
+            @SlashOption(name = "guardsman", description = "Кого необходимо уволить") User guardsman
+    ) {
+
+    }
+
+    @JDASlashCommand(name = "guardsmen", subcommand = "promote", description = "Повысить должность")
+    public void onSlashPromoteGuardsman(
+            GuildSlashEvent event,
+            @SlashOption(name = "guardsman", description = "Кого необходимо повысить") User guardsman
+    ) {
+
+    }
+
+    @JDASlashCommand(name = "guardsmen", subcommand = "demote",  description = "Понизить должность")
+    public void onSlashDemoteGuardsman(
+            GuildSlashEvent event,
+            @SlashOption(name = "guardsman", description = "Кого необходимо понизить") User guardsman
+    ) {
+
+    }
+
+    @JDASlashCommand(name = "guardsmen", subcommand = "points", description = "Изменить количество баллов")
+    public void onSlashChangePointsGuardsman(
+            GuildSlashEvent event,
+            @SlashOption(name = "guardsman", description = "У кого необходимо изменить") User guardsman,
+            @SlashOption(name = "quantity", description = "На сколько изменить, (пример 10, -15)") Integer quantity
+    ) {
+
+    }
+
 }

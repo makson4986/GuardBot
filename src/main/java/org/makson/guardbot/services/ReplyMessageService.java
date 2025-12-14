@@ -7,6 +7,7 @@ import org.makson.guardbot.dto.DepartmentDto;
 import org.makson.guardbot.dto.GuardsmanDto;
 import org.makson.guardbot.dto.ReportDto;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -22,8 +23,8 @@ public class ReplyMessageService {
                 .build();
     }
 
-    public MessageEmbed createRankedEmbed(GuardsmanDto guardsman) {
-        return createInfoEmbed(guardsman, """
+    public MessageEmbed createRankedEmbed(GuardsmanDto guardsman, Color color) {
+        return createInfoEmbed(guardsman, color, """
                 **Ранг:** %s
                 **Отделы:** %s
                 **Баллы:** %d/%d
@@ -32,8 +33,8 @@ public class ReplyMessageService {
                 """);
     }
 
-    public MessageEmbed createAdminEmbed(GuardsmanDto guardsman) {
-        return createInfoEmbed(guardsman, """
+    public MessageEmbed createAdminEmbed(GuardsmanDto guardsman, Color color) {
+        return createInfoEmbed(guardsman, color, """
                 **Ранг:** %s
                 **Отделы:** %s
                 """);
@@ -73,12 +74,12 @@ public class ReplyMessageService {
                 .build();
     }
 
-    private MessageEmbed createInfoEmbed(GuardsmanDto guardsman, String descriptionTemplate) {
+    private MessageEmbed createInfoEmbed(GuardsmanDto guardsman, Color color, String descriptionTemplate) {
         String faceIconUrl = "https://mc-heads.net/avatar/%s/128";
 
         return new EmbedBuilder()
                 .setTitle("Информация о %s".formatted(guardsman.name()))
-                .setColor(0xFF0000)
+                .setColor(color)
                 .setThumbnail(faceIconUrl.formatted(guardsman.name()))
                 .setDescription(descriptionTemplate.formatted(
                         guardsman.rank().name(),
