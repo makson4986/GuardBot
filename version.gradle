@@ -1,0 +1,7 @@
+ext {
+    versions = [
+            "mapstruct": '1.6.3',
+            "jda": '6.1.2',
+            "botcommands": '3.0.0-beta.7'
+    ]
+}

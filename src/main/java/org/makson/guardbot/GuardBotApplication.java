@@ -3,7 +3,7 @@ package org.makson.guardbot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "org.makson.guardbot")
 public class GuardBotApplication {
 
     public static void main(String[] args) {

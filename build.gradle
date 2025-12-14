@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '4.0.0'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'io.freefair.lombok' version "8.13.1"
 }
 
 group = 'org.makson'
@@ -24,11 +25,19 @@ repositories {
     mavenCentral()
 }
 
+apply from: 'version.gradle'
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation "net.dv8tion:JDA:${versions.jda}"
+    implementation "org.mapstruct:mapstruct:${versions.mapstruct}"
+    implementation "io.github.freya022:BotCommands-spring:${versions.botcommands}"
+    implementation "io.github.freya022:BotCommands:${versions.botcommands}"
+//    implementation 'org.springframework.boot:spring-boot-starter-liquibase'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.mapstruct:mapstruct-processor:${versions.mapstruct}"
     testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/guard
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+botcommands:
+  core:
+    packages: org.makson.guardbot
+#  liquibase:
+#    change-log: classpath:/db/changelog/db.changelog-master.yml
+
