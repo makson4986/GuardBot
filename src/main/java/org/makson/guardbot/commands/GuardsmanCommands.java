@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
-import org.makson.guardbot.dto.GuardsmanResponseDto;
+import org.makson.guardbot.dto.GuardsmanInfoDto;
 import org.makson.guardbot.services.GuardsmanService;
 import org.makson.guardbot.services.RankService;
 import org.makson.guardbot.services.EmbedMessageService;
@@ -57,7 +57,7 @@ public class GuardsmanCommands extends ApplicationCommand {
             return;
         }
 
-        GuardsmanResponseDto guardsmanInfo = guardsmanService.getGuardsman(guardsman.getEffectiveName());
+        GuardsmanInfoDto guardsmanInfo = guardsmanService.getGuardsman(guardsman.getEffectiveName());
         MessageEmbed answer;
 
 

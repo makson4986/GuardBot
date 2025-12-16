@@ -3,8 +3,8 @@ package org.makson.guardbot.services;
 import io.github.freya022.botcommands.api.core.service.annotations.BService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import org.makson.guardbot.dto.DepartmentDto;
-import org.makson.guardbot.dto.GuardsmanResponseDto;
+import org.makson.guardbot.dto.DepartmentInfoDto;
+import org.makson.guardbot.dto.GuardsmanInfoDto;
 import org.makson.guardbot.dto.ReportDto;
 
 import java.awt.*;
@@ -23,7 +23,7 @@ public class EmbedMessageService {
                 .build();
     }
 
-    public MessageEmbed createRankedEmbed(GuardsmanResponseDto guardsman, Color color) {
+    public MessageEmbed createRankedEmbed(GuardsmanInfoDto guardsman, Color color) {
         return createInfoEmbed(guardsman, color, """
                 **Ранг:** %s
                 **Отделы:** %s
@@ -33,20 +33,20 @@ public class EmbedMessageService {
                 """);
     }
 
-    public MessageEmbed createAdminEmbed(GuardsmanResponseDto guardsman, Color color) {
+    public MessageEmbed createAdminEmbed(GuardsmanInfoDto guardsman, Color color) {
         return createInfoEmbed(guardsman, color, """
                 **Ранг:** %s
                 **Отделы:** %s
                 """);
     }
 
-    public MessageEmbed createAllInfoEmbed(List<GuardsmanResponseDto> guardsmen) {
+    public MessageEmbed createAllInfoEmbed(List<GuardsmanInfoDto> guardsmen) {
         return new EmbedBuilder()
                 .setTitle("Информация о гвардейцах")
                 .setColor(0xFF0000)
                 .setDescription(
                         guardsmen.stream()
-                                .map(GuardsmanResponseDto::name)
+                                .map(GuardsmanInfoDto::name)
                                 .collect(Collectors.joining("\n"))
                 )
                 .build();
@@ -74,7 +74,7 @@ public class EmbedMessageService {
                 .build();
     }
 
-    private MessageEmbed createInfoEmbed(GuardsmanResponseDto guardsman, Color color, String descriptionTemplate) {
+    private MessageEmbed createInfoEmbed(GuardsmanInfoDto guardsman, Color color, String descriptionTemplate) {
         String faceIconUrl = "https://mc-heads.net/avatar/%s/128";
 
         return new EmbedBuilder()
@@ -83,7 +83,7 @@ public class EmbedMessageService {
                 .setThumbnail(faceIconUrl.formatted(guardsman.name()))
                 .setDescription(descriptionTemplate.formatted(
                         guardsman.rank().name(),
-                        getDepartment(guardsman.departments()),
+                        getDepartment(guardsman.departmentsName()),
                         guardsman.points(),
                         guardsman.requiredPoints(),
                         guardsman.specialReport(),
@@ -93,13 +93,11 @@ public class EmbedMessageService {
                 .build();
     }
 
-    private String getDepartment(List<DepartmentDto> departments) {
+    private String getDepartment(List<String> departments) {
         if (departments.isEmpty()) {
             return "Отсутствуют";
         }
-        return departments.stream()
-                .map(DepartmentDto::name)
-                .collect(Collectors.joining(", "));
+        return String.join(", ", departments);
     }
 
     private String createReportDate() {

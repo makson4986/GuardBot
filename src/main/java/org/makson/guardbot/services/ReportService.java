@@ -3,7 +3,7 @@ package org.makson.guardbot.services;
 import io.github.freya022.botcommands.api.core.service.annotations.BService;
 import lombok.RequiredArgsConstructor;
 import org.makson.guardbot.utils.ReportParser;
-import org.makson.guardbot.dto.GuardsmanResponseDto;
+import org.makson.guardbot.dto.GuardsmanInfoDto;
 import org.makson.guardbot.dto.ReportDto;
 
 import java.time.LocalDate;
@@ -19,7 +19,7 @@ public class ReportService {
         List<String> guardsmen = reportParser.parseUsernames(reportDto.names().getFirst(), "Parameter 'usernames' is missing");
 
 
-        List<GuardsmanResponseDto> guardsmenDto = guardsmen.stream()
+        List<GuardsmanInfoDto> guardsmenDto = guardsmen.stream()
                 .map(guardsman ->
                         guardsmanService.getGuardsman(reportParser.parseIdToUsernames(guardsman))
                 )
