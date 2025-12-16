@@ -1,9 +1,9 @@
 package org.makson.guardbot.services;
 
 
+import io.github.freya022.botcommands.api.core.BotCommands;
 import io.github.freya022.botcommands.api.core.service.annotations.BService;
 import lombok.RequiredArgsConstructor;
-import org.makson.guardbot.dto.GuardsmanCreatingDto;
 import org.makson.guardbot.dto.GuardsmanResponseDto;
 import org.makson.guardbot.exceptions.GuardsmanNotFoundException;
 import org.makson.guardbot.mappers.GuardsmanMapper;
@@ -25,6 +25,7 @@ public class GuardsmanService {
     public GuardsmanResponseDto getGuardsman(String name) {
         Optional<Guardsman> guardsman = guardsmanRepository.findByName(name);
         return mapper.mapGuardsman(guardsman.orElseThrow(() -> new GuardsmanNotFoundException("There is no information about this guardsman.")));
+
     }
 
     @Transactional(readOnly = true)

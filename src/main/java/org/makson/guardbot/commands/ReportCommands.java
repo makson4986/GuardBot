@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.makson.guardbot.commands.autocompletes.ReportTypeAutocomplete;
 import org.makson.guardbot.dto.ReportDto;
 import org.makson.guardbot.exceptions.ChannelNoFoundException;
-import org.makson.guardbot.services.ReplyMessageService;
+import org.makson.guardbot.services.EmbedMessageService;
 import org.makson.guardbot.services.ReportService;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -27,7 +27,7 @@ import java.util.Optional;
 public class ReportCommands extends ApplicationCommand {
     @Value("${discord.report-channel-id}")
     private String reportChannelId;
-    private final ReplyMessageService replyMessageService;
+    private final EmbedMessageService replyMessageService;
     private final ReportService reportService;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)

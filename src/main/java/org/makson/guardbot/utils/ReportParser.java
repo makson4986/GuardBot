@@ -1,9 +1,10 @@
-package org.makson.guardbot;
+package org.makson.guardbot.utils;
 
 import io.github.freya022.botcommands.api.core.annotations.BEventListener;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import org.makson.guardbot.exceptions.ReportParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -12,10 +13,14 @@ import java.util.List;
 @Component
 public class ReportParser {
     private Guild guild;
+    @Value("${discord.guild-id}")
+    private String guildId;
 
     @BEventListener
-    public void onJDAReady(GuildReadyEvent event) {
-        guild = event.getGuild();
+    public void onGuildReady(GuildReadyEvent event) {
+        if (event.getGuild().getId().equals(guildId)) {
+            guild = event.getGuild();
+        }
     }
 
     public List<String> parseUsernames(String usernames, String errorText) {

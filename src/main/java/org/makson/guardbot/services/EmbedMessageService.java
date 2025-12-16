@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @BService
-public class ReplyMessageService {
+public class EmbedMessageService {
     public MessageEmbed createErrorEmbed(String description) {
         return new EmbedBuilder()
                 .setTitle("Ошибка!")

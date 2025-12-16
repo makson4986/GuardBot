@@ -7,19 +7,20 @@ CREATE TABLE IF NOT EXISTS ranks
     name                VARCHAR(32) UNIQUE NOT NULL,
     max_points          INT                NOT NULL,
     max_special_reports INT                NOT NULL,
-    position            INT                NOT NULL
+    position            INT                NOT NULL,
+    discord_role_id     BIGINT NOT NULL
 );
 --rollback DROP TABLE ranks;
 
 --changeset makson:2
 CREATE TABLE IF NOT EXISTS guardsmen
 (
-    id              SERIAL PRIMARY KEY,
-    name            VARCHAR(64) UNIQUE NOT NULL,
-    rank_id         INT                NOT NULL,
-    points          INT DEFAULT 0,
+    id             SERIAL PRIMARY KEY,
+    name           VARCHAR(64) UNIQUE NOT NULL,
+    rank_id        INT                NOT NULL,
+    points         INT DEFAULT 0,
     special_report INT DEFAULT 0,
-    last_report   DATE,
+    last_report    DATE,
     FOREIGN KEY (rank_id) REFERENCES ranks (id)
 );
 --rollback DROP TABLE guardsman;

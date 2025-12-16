@@ -2,8 +2,7 @@ package org.makson.guardbot.services;
 
 import io.github.freya022.botcommands.api.core.service.annotations.BService;
 import lombok.RequiredArgsConstructor;
-import org.makson.guardbot.ReportParser;
-import org.makson.guardbot.dto.GuardsmanCreatingDto;
+import org.makson.guardbot.utils.ReportParser;
 import org.makson.guardbot.dto.GuardsmanResponseDto;
 import org.makson.guardbot.dto.ReportDto;
 

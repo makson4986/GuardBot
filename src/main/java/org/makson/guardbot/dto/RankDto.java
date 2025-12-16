@@ -3,8 +3,9 @@ package org.makson.guardbot.dto;
 public record RankDto(
         int id,
         String name,
-        int points,
-        int special_reports,
-        int position
+        int maxPoints,
+        int maxSpecialReports,
+        int position,
+        long discordRoleId
 ) {
 }

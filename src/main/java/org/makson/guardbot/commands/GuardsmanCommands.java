@@ -13,7 +13,8 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import org.makson.guardbot.dto.GuardsmanResponseDto;
 import org.makson.guardbot.services.GuardsmanService;
-import org.makson.guardbot.services.ReplyMessageService;
+import org.makson.guardbot.services.RankService;
+import org.makson.guardbot.services.EmbedMessageService;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -22,7 +23,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class GuardsmanCommands extends ApplicationCommand {
     private final GuardsmanService guardsmanService;
-    private final ReplyMessageService replyMessageService;
+    private final EmbedMessageService replyMessageService;
+    private final RankService rankService;
     private final Set<String> ADMIN_RANKS = Set.of("Зам. главы", "Глава гвардии");
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
@@ -89,6 +91,9 @@ public class GuardsmanCommands extends ApplicationCommand {
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого необходимо повысить") User guardsman
     ) {
+        Member member = event.getGuild().retrieveMember(guardsman).complete();
+
+
 
     }
 
