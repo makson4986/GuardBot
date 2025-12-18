@@ -48,7 +48,17 @@ public class ReportCommands extends ApplicationCommand {
 
         ReportDto reportDto = new ReportDto(List.of(usernames), type, description, mediaUrl, Optional.ofNullable(attachment));
 
-        ReportDto parsedReport = reportService.create(reportDto);
+        ReportDto parsedReport = null;
+
+        try {
+            parsedReport = reportService.create(reportDto);
+        } catch (Exception e) {
+            event.getHook().sendMessageEmbeds(
+                    replyMessageService.createErrorEmbed("Указаны неверные ник(и) гвардейцев")
+            ).queue();
+            return;
+        }
+
         MessageEmbed reportEmbed = replyMessageService.createReportEmbed(parsedReport);
 
         reportChannel.sendMessageEmbeds(reportEmbed).queue();
