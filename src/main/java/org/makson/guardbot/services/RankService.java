@@ -14,9 +14,4 @@ public class RankService {
     private final RankRepository rankRepository;
     private final RankMapper mapper;
 
-    @Transactional(readOnly = true)
-    public RankDto getRank(String name) {
-        Rank rank = rankRepository.findByName(name);
-        return mapper.mapRank(rank);
-    }
 }

@@ -17,20 +17,37 @@ import java.util.Optional;
 @BService
 @RequiredArgsConstructor
 public class GuardsmanService {
+    private final DepartmentService departmentService;
     private final GuardsmanRepository guardsmanRepository;
     private final GuardsmanMapper mapper;
 
     @Transactional(readOnly = true)
     public GuardsmanInfoDto getGuardsman(String name) {
         Optional<Guardsman> guardsman = guardsmanRepository.findByName(name);
-        return mapper.mapGuardsman(guardsman.orElseThrow(() -> new GuardsmanNotFoundException("There is no information about this guardsman.")));
+
+        if (guardsman.isPresent()) {
+            Guardsman guard = guardsman.get();
+            return new GuardsmanInfoDto(
+                    guard.getId(),
+                    guard.getName(),
+                    guard.getRank().getName(),
+                    departmentService.findAllByGuardsmanName(guard.getName()),
+                    guard.getLastReport(),
+                    guard.getPoints(),
+                    guard.getSpecialReport(),
+                    guard.getRank().getMaxPoints(),
+                    guard.getRank().getMaxSpecialReports()
+            );
+        }
+        return null;
 
     }
 
     @Transactional(readOnly = true)
     public List<GuardsmanInfoDto> getAllGuardsman() {
         List<Guardsman> guardsmen = guardsmanRepository.findAll();
-        return mapper.mapGuardsmanList(guardsmen);
+        return null;
+//        return mapper.mapGuardsmanList(guardsmen);
     }
 
 

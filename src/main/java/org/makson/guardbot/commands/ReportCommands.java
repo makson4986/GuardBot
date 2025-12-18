@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.makson.guardbot.commands.autocompletes.ReportTypeAutocomplete;
 import org.makson.guardbot.dto.ReportDto;
-import org.makson.guardbot.exceptions.ChannelNoFoundException;
+import org.makson.guardbot.exceptions.ChannelNotFoundException;
 import org.makson.guardbot.services.EmbedMessageService;
 import org.makson.guardbot.services.ReportService;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +43,7 @@ public class ReportCommands extends ApplicationCommand {
         TextChannel reportChannel = event.getGuild().getTextChannelById(reportChannelId);
 
         if (reportChannel == null) {
-            throw new ChannelNoFoundException("The channel with the specified ID was not found");
+            throw new ChannelNotFoundException("The channel with the specified ID was not found");
         }
 
         ReportDto reportDto = new ReportDto(List.of(usernames), type, description, mediaUrl, Optional.ofNullable(attachment));

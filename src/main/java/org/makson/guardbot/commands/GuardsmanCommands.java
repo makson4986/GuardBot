@@ -61,7 +61,7 @@ public class GuardsmanCommands extends ApplicationCommand {
         MessageEmbed answer;
 
 
-        if (ADMIN_RANKS.contains(guardsmanInfo.rank().name())) {
+        if (ADMIN_RANKS.contains(guardsmanInfo.rankName())) {
             answer = replyMessageService.createAdminEmbed(guardsmanInfo, guardsman.getColor());
         } else {
             answer = replyMessageService.createRankedEmbed(guardsmanInfo, guardsman.getColor());

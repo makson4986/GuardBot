@@ -7,5 +7,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface RankMapper {
-    RankDto mapRank(Rank rank);
+//    RankDto mapRank(Rank rank);
 }

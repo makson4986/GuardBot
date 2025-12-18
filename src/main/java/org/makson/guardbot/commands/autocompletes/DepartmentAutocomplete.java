@@ -16,7 +16,7 @@ public class DepartmentAutocomplete extends ApplicationCommand {
     @AutocompleteHandler(DEPARTMENT_AUTOCOMPLETE_NAME)
     public Collection<String> onReportTypeAutocomplete(CommandAutoCompleteInteractionEvent event) {
         List<String> DEPARTMENTS = List.of(
-                "Отряд 'Санитаров'", "Отряд 'Эпсилон'", "Отряд 'Дельта'"
+                "Отряд \"Санитаров\"", "Отряд \"Эпсилон\"", "Отряд \"Дельта\""
         );
 
         return DEPARTMENTS.stream()

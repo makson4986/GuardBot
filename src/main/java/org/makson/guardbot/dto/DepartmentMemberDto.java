@@ -4,8 +4,7 @@ import org.makson.guardbot.models.DepartmentRole;
 
 public record DepartmentMemberDto(
         int id,
-        GuardsmanInfoDto guardsman,
-        DepartmentInfoDto department,
+        String guardsmanName,
         DepartmentRole role
 ) {
 }

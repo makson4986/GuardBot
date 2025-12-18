@@ -4,13 +4,16 @@ import io.github.freya022.botcommands.api.core.service.annotations.BService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.makson.guardbot.dto.DepartmentInfoDto;
+import org.makson.guardbot.dto.DepartmentMemberDto;
 import org.makson.guardbot.dto.GuardsmanInfoDto;
 import org.makson.guardbot.dto.ReportDto;
+import org.makson.guardbot.models.DepartmentRole;
 
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @BService
@@ -74,6 +77,20 @@ public class EmbedMessageService {
                 .build();
     }
 
+    public MessageEmbed createDepartmentInfoEmbed(DepartmentInfoDto departmentInfoDto) {
+        return new EmbedBuilder()
+                .setTitle("Информация об " + departmentInfoDto.name())
+                .setColor(Color.RED)
+                .setDescription("""
+                        **Начальник отдела:** %s
+                        **Участники:** \n%s
+                        """.formatted(
+                        getHeadman(departmentInfoDto.members()),
+                        getDepartmentMembersString(departmentInfoDto.members())
+                ))
+                .build();
+    }
+
     private MessageEmbed createInfoEmbed(GuardsmanInfoDto guardsman, Color color, String descriptionTemplate) {
         String faceIconUrl = "https://mc-heads.net/avatar/%s/128";
 
@@ -82,7 +99,7 @@ public class EmbedMessageService {
                 .setColor(color)
                 .setThumbnail(faceIconUrl.formatted(guardsman.name()))
                 .setDescription(descriptionTemplate.formatted(
-                        guardsman.rank().name(),
+                        guardsman.rankName(),
                         getDepartment(guardsman.departmentsName()),
                         guardsman.points(),
                         guardsman.requiredPoints(),
@@ -105,5 +122,27 @@ public class EmbedMessageService {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
         return now.format(formatter);
+    }
+
+    private String getHeadman(List<DepartmentMemberDto> departments) {
+        Optional<DepartmentMemberDto> headman = departments.stream()
+                .filter(member -> member.role() == DepartmentRole.HEADMAN)
+                .findFirst();
+
+        if (headman.isPresent()) {
+            return headman.get().guardsmanName();
+        }
+
+        return "Начальник не назначен";
+    }
+
+    private String getDepartmentMembersString(List<DepartmentMemberDto> members) {
+        if (members.isEmpty()) {
+            return "В данном отделе участники отсутсвуют";
+        }
+
+        return members.stream()
+                .map(DepartmentMemberDto::guardsmanName)
+                .collect(Collectors.joining("\n"));
     }
 }

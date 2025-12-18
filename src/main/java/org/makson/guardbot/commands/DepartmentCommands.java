@@ -5,15 +5,37 @@ import io.github.freya022.botcommands.api.commands.application.ApplicationComman
 import io.github.freya022.botcommands.api.commands.application.CommandScope;
 import io.github.freya022.botcommands.api.commands.application.slash.GuildSlashEvent;
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.JDASlashCommand;
+import io.github.freya022.botcommands.api.commands.application.slash.annotations.SlashOption;
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.TopLevelSlashCommandData;
 import lombok.RequiredArgsConstructor;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import org.makson.guardbot.commands.autocompletes.DepartmentAutocomplete;
+import org.makson.guardbot.dto.DepartmentInfoDto;
+import org.makson.guardbot.services.DepartmentService;
+import org.makson.guardbot.services.EmbedMessageService;
 
 @Command
 @RequiredArgsConstructor
 public class DepartmentCommands extends ApplicationCommand {
+    private final DepartmentService departmentService;
+    private final EmbedMessageService embedMessageService;
+
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
     @JDASlashCommand(name = "department", subcommand = "info", description = "Получить информацию об отделе")
-    public void onSlashGetInfoDepartment(GuildSlashEvent event) {
+    public void onSlashGetInfoDepartment(
+            GuildSlashEvent event,
+            @SlashOption(name = "name", description = "Выбери отдел", autocomplete = DepartmentAutocomplete.DEPARTMENT_AUTOCOMPLETE_NAME) String name) {
+        event.deferReply().queue();
 
+        MessageEmbed departmentInfoEmbed;
+
+        try {
+            DepartmentInfoDto department = departmentService.getDepartmentByName(name);
+            departmentInfoEmbed = embedMessageService.createDepartmentInfoEmbed(department);
+        } catch (Exception e) {
+            departmentInfoEmbed = embedMessageService.createErrorEmbed("Данного отдела не существует");
+        }
+
+        event.getHook().sendMessageEmbeds(departmentInfoEmbed).queue();
     }
 }
