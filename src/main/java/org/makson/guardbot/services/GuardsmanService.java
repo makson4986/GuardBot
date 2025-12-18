@@ -25,29 +25,20 @@ public class GuardsmanService {
     public GuardsmanInfoDto getGuardsman(String name) {
         Optional<Guardsman> guardsman = guardsmanRepository.findByName(name);
 
-        if (guardsman.isPresent()) {
-            Guardsman guard = guardsman.get();
-            return new GuardsmanInfoDto(
-                    guard.getId(),
-                    guard.getName(),
-                    guard.getRank().getName(),
-                    departmentService.findAllByGuardsmanName(guard.getName()),
-                    guard.getLastReport(),
-                    guard.getPoints(),
-                    guard.getSpecialReport(),
-                    guard.getRank().getMaxPoints(),
-                    guard.getRank().getMaxSpecialReports()
-            );
+        if (guardsman.isEmpty()) {
+            throw new GuardsmanNotFoundException("Guardsman with name " + name + " not found");
         }
-        return null;
 
+        Guardsman guard = guardsman.get();
+        return createGuardsmanInfo(guard);
     }
 
     @Transactional(readOnly = true)
     public List<GuardsmanInfoDto> getAllGuardsman() {
         List<Guardsman> guardsmen = guardsmanRepository.findAll();
-        return null;
-//        return mapper.mapGuardsmanList(guardsmen);
+        return guardsmen.stream()
+                .map(this::createGuardsmanInfo)
+                .toList();
     }
 
 
@@ -59,7 +50,21 @@ public class GuardsmanService {
     @Transactional
     public void updateLastReportDate(String name, LocalDate date) {
         Guardsman guardsman = guardsmanRepository.findByName(name)
-                .orElseThrow(() -> new GuardsmanNotFoundException("There is no information about this guardsman."));
+                .orElseThrow(() -> new GuardsmanNotFoundException("Guardsman with name " + name + " not found"));
         guardsman.setLastReport(date);
+    }
+
+    private GuardsmanInfoDto createGuardsmanInfo(Guardsman guardsman) {
+        return new GuardsmanInfoDto(
+                guardsman.getId(),
+                guardsman.getName(),
+                guardsman.getRank().getName(),
+                departmentService.findAllByGuardsmanName(guardsman.getName()),
+                guardsman.getLastReport(),
+                guardsman.getPoints(),
+                guardsman.getSpecialReport(),
+                guardsman.getRank().getMaxPoints(),
+                guardsman.getRank().getMaxSpecialReports()
+        );
     }
 }

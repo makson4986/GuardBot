@@ -12,20 +12,16 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import org.makson.guardbot.dto.GuardsmanInfoDto;
-import org.makson.guardbot.services.GuardsmanService;
-import org.makson.guardbot.services.RankService;
 import org.makson.guardbot.services.EmbedMessageService;
+import org.makson.guardbot.services.GuardsmanService;
 
 import javax.annotation.Nullable;
-import java.util.Set;
 
 @Command
 @RequiredArgsConstructor
 public class GuardsmanCommands extends ApplicationCommand {
     private final GuardsmanService guardsmanService;
     private final EmbedMessageService replyMessageService;
-    private final RankService rankService;
-    private final Set<String> ADMIN_RANKS = Set.of("Зам. главы", "Глава гвардии");
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
     @JDASlashCommand(name = "guardsmen", subcommand = "list", description = "Список всех гвардейцев")
@@ -43,28 +39,20 @@ public class GuardsmanCommands extends ApplicationCommand {
             User user) {
 
         event.deferReply().queue();
-        Member guardsman = event.getMember();
-
-        if (user != null) {
-            guardsman = event.getGuild().retrieveMember(user).complete();
-        }
+        Member guardsman = defineMember(event, user);
 
         if (guardsman == null) {
-            event.getHook().sendMessageEmbeds(
-                            replyMessageService
-                                    .createErrorEmbed("Для получения информации данный гвардеец должен находится на сервере, либо используйтся команду /dismiss_guardsman"))
-                    .queue();
+            event.getHook().sendMessageEmbeds(replyMessageService.createErrorEmbed("Для получения информации данный гвардеец должен находится на сервере")).queue();
             return;
         }
 
-        GuardsmanInfoDto guardsmanInfo = guardsmanService.getGuardsman(guardsman.getEffectiveName());
-        MessageEmbed answer;
+        MessageEmbed answer = null;
 
-
-        if (ADMIN_RANKS.contains(guardsmanInfo.rankName())) {
-            answer = replyMessageService.createAdminEmbed(guardsmanInfo, guardsman.getColor());
-        } else {
-            answer = replyMessageService.createRankedEmbed(guardsmanInfo, guardsman.getColor());
+        try {
+            GuardsmanInfoDto guardsmanInfo = guardsmanService.getGuardsman(guardsman.getEffectiveName());
+            answer = replyMessageService.createInfoEmbed(guardsmanInfo, guardsman.getColor());
+        } catch (Exception e) {
+            answer = replyMessageService.createErrorEmbed(guardsman.getEffectiveName() + " не найден");
         }
 
         event.getHook().sendMessageEmbeds(answer).queue();
@@ -92,12 +80,9 @@ public class GuardsmanCommands extends ApplicationCommand {
             @SlashOption(name = "guardsman", description = "Кого необходимо повысить") User guardsman
     ) {
         Member member = event.getGuild().retrieveMember(guardsman).complete();
-
-
-
     }
 
-    @JDASlashCommand(name = "guardsmen", subcommand = "demote",  description = "Понизить должность")
+    @JDASlashCommand(name = "guardsmen", subcommand = "demote", description = "Понизить должность")
     public void onSlashDemoteGuardsman(
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого необходимо понизить") User guardsman
@@ -112,6 +97,14 @@ public class GuardsmanCommands extends ApplicationCommand {
             @SlashOption(name = "quantity", description = "На сколько изменить, (пример 10, -15)") Integer quantity
     ) {
 
+    }
+
+    private Member defineMember(GuildSlashEvent event, User user) {
+        if (user != null) {
+            return event.getGuild().retrieveMember(user).complete();
+        }
+
+        return event.getMember();
     }
 
 }

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @BService
@@ -24,23 +25,6 @@ public class EmbedMessageService {
                 .setColor(0xFF0000)
                 .setDescription(description)
                 .build();
-    }
-
-    public MessageEmbed createRankedEmbed(GuardsmanInfoDto guardsman, Color color) {
-        return createInfoEmbed(guardsman, color, """
-                **Ранг:** %s
-                **Отделы:** %s
-                **Баллы:** %d/%d
-                **Спец. отчеты:** %d/%d
-                **Последний отчет:** %s
-                """);
-    }
-
-    public MessageEmbed createAdminEmbed(GuardsmanInfoDto guardsman, Color color) {
-        return createInfoEmbed(guardsman, color, """
-                **Ранг:** %s
-                **Отделы:** %s
-                """);
     }
 
     public MessageEmbed createAllInfoEmbed(List<GuardsmanInfoDto> guardsmen) {
@@ -91,8 +75,16 @@ public class EmbedMessageService {
                 .build();
     }
 
-    private MessageEmbed createInfoEmbed(GuardsmanInfoDto guardsman, Color color, String descriptionTemplate) {
+    public MessageEmbed createInfoEmbed(GuardsmanInfoDto guardsman, Color color) {
+        final Set<String> ADMIN_RANKS = Set.of("Зам. главы", "Глава гвардии");
         String faceIconUrl = "https://mc-heads.net/avatar/%s/128";
+        String descriptionTemplate;
+
+        if (ADMIN_RANKS.contains(guardsman.rankName())) {
+            descriptionTemplate = getAdminInfoDescription();
+        } else {
+            descriptionTemplate = getRankedInfoDescription();
+        }
 
         return new EmbedBuilder()
                 .setTitle("Информация о %s".formatted(guardsman.name()))
@@ -145,4 +137,22 @@ public class EmbedMessageService {
                 .map(DepartmentMemberDto::guardsmanName)
                 .collect(Collectors.joining("\n"));
     }
+
+    private String getRankedInfoDescription() {
+        return """
+                **Ранг:** %s
+                **Отделы:** %s
+                **Баллы:** %d/%d
+                **Спец. отчеты:** %d/%d
+                **Последний отчет:** %s
+                """;
+    }
+
+    private String getAdminInfoDescription() {
+        return """
+                **Ранг:** %s
+                **Отделы:** %s
+                """;
+    }
+
 }
