@@ -6,9 +6,10 @@ import org.makson.guardbot.dto.RankDto;
 import org.makson.guardbot.mappers.RankMapper;
 import org.makson.guardbot.models.Rank;
 import org.makson.guardbot.repositories.RankRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@BService
+@Service
 @RequiredArgsConstructor
 public class RankService {
     private final RankRepository rankRepository;

@@ -1,6 +1,5 @@
 package org.makson.guardbot.services;
 
-import io.github.freya022.botcommands.api.core.service.annotations.BService;
 import lombok.RequiredArgsConstructor;
 import org.makson.guardbot.dto.DepartmentInfoDto;
 import org.makson.guardbot.dto.DepartmentMemberDto;
@@ -8,11 +7,12 @@ import org.makson.guardbot.exceptions.DepartmentNotFoundException;
 import org.makson.guardbot.mappers.DepartmentMapper;
 import org.makson.guardbot.models.Department;
 import org.makson.guardbot.repositories.DepartmentRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@BService
+@Service
 @RequiredArgsConstructor
 public class DepartmentService {
     private final DepartmentRepository departmentRepository;

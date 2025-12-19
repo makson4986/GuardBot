@@ -1,20 +1,20 @@
 package org.makson.guardbot.services;
 
 
-import io.github.freya022.botcommands.api.core.service.annotations.BService;
 import lombok.RequiredArgsConstructor;
 import org.makson.guardbot.dto.GuardsmanInfoDto;
 import org.makson.guardbot.exceptions.GuardsmanNotFoundException;
 import org.makson.guardbot.mappers.GuardsmanMapper;
 import org.makson.guardbot.models.Guardsman;
 import org.makson.guardbot.repositories.GuardsmanRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@BService
+@Service
 @RequiredArgsConstructor
 public class GuardsmanService {
     private final DepartmentService departmentService;
@@ -52,6 +52,13 @@ public class GuardsmanService {
         Guardsman guardsman = guardsmanRepository.findByName(name)
                 .orElseThrow(() -> new GuardsmanNotFoundException("Guardsman with name " + name + " not found"));
         guardsman.setLastReport(date);
+    }
+
+    @Transactional
+    public void changePoints(String name, int points) {
+        Guardsman guardsman = guardsmanRepository.findByName(name)
+                .orElseThrow(() -> new GuardsmanNotFoundException("Guardsman with name " + name + " not found"));
+        guardsman.setPoints(guardsman.getPoints() + points);
     }
 
     private GuardsmanInfoDto createGuardsmanInfo(Guardsman guardsman) {

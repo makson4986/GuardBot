@@ -37,7 +37,6 @@ public class SpringBot extends JDAService {
     @Override
     public void createJDA(@NotNull BReadyEvent event, @NotNull IEventManager eventManager) {
         createLight(token)
-                .setEnabledIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MESSAGES)
                 .build();
     }
 }

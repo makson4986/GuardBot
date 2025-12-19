@@ -1,15 +1,15 @@
 package org.makson.guardbot.services;
 
-import io.github.freya022.botcommands.api.core.service.annotations.BService;
 import lombok.RequiredArgsConstructor;
-import org.makson.guardbot.utils.ReportParser;
 import org.makson.guardbot.dto.GuardsmanInfoDto;
 import org.makson.guardbot.dto.ReportDto;
+import org.makson.guardbot.utils.ReportParser;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@BService
+@Service
 @RequiredArgsConstructor
 public class ReportService {
     private final GuardsmanService guardsmanService;
