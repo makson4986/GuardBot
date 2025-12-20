@@ -27,7 +27,8 @@ public class ReportService {
 
         guardsmenDto
                 .forEach(guardsman ->
-                        guardsmanService.updateLastReportDate(guardsman.name(), LocalDate.now()));
+                        guardsmanService.updateLastReportDate(guardsman.name(), LocalDate.now())
+                );
 
 
         return new ReportDto(

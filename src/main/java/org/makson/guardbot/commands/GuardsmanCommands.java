@@ -46,14 +46,8 @@ public class GuardsmanCommands extends ApplicationCommand {
             return;
         }
 
-        MessageEmbed answer = null;
-
-        try {
-            GuardsmanInfoDto guardsmanInfo = guardsmanService.getGuardsman(guardsman.getEffectiveName());
-            answer = replyMessageService.createInfoEmbed(guardsmanInfo, guardsman.getColor());
-        } catch (Exception e) {
-            answer = replyMessageService.createErrorEmbed(guardsman.getEffectiveName() + " не найден");
-        }
+        GuardsmanInfoDto guardsmanInfo = guardsmanService.getGuardsman(guardsman.getEffectiveName());
+        MessageEmbed answer = replyMessageService.createInfoEmbed(guardsmanInfo, guardsman.getColor());
 
         event.getHook().sendMessageEmbeds(answer).queue();
     }

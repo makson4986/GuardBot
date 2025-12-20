@@ -27,14 +27,8 @@ public class DepartmentCommands extends ApplicationCommand {
             @SlashOption(name = "name", description = "Выбери отдел", autocomplete = DepartmentAutocomplete.DEPARTMENT_AUTOCOMPLETE_NAME) String name) {
         event.deferReply().queue();
 
-        MessageEmbed departmentInfoEmbed;
-
-        try {
-            DepartmentInfoDto department = departmentService.getDepartmentByName(name);
-            departmentInfoEmbed = embedMessageService.createDepartmentInfoEmbed(department);
-        } catch (Exception e) {
-            departmentInfoEmbed = embedMessageService.createErrorEmbed("Данного отдела не существует");
-        }
+        DepartmentInfoDto department = departmentService.getDepartmentByName(name);
+        MessageEmbed departmentInfoEmbed = embedMessageService.createDepartmentInfoEmbed(department);
 
         event.getHook().sendMessageEmbeds(departmentInfoEmbed).queue();
     }

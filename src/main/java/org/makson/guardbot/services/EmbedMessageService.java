@@ -3,10 +3,7 @@ package org.makson.guardbot.services;
 import io.github.freya022.botcommands.api.core.service.annotations.BService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import org.makson.guardbot.dto.DepartmentInfoDto;
-import org.makson.guardbot.dto.DepartmentMemberDto;
-import org.makson.guardbot.dto.GuardsmanInfoDto;
-import org.makson.guardbot.dto.ReportDto;
+import org.makson.guardbot.dto.*;
 import org.makson.guardbot.models.DepartmentRole;
 
 import java.awt.*;
