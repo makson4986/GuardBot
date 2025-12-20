@@ -16,6 +16,8 @@ import org.makson.guardbot.exceptions.*;
 import org.makson.guardbot.services.EmbedMessageService;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.time.format.DateTimeParseException;
+
 @BService
 @RequiredArgsConstructor
 public class ExceptionHandler implements GlobalExceptionHandler {
@@ -50,7 +52,10 @@ public class ExceptionHandler implements GlobalExceptionHandler {
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Ошибка при формировании отчета, проверьте данные");
             case PrisonerNotFoundException prisonerNotFoundException ->
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Заключенный не найден");
+            case DateTimeParseException dateTimeParseException ->
+                    handleWarn((SlashCommandInteractionEvent) event, throwable, "Неверный формат даты");
             default -> {
+                handleError((SlashCommandInteractionEvent) event, throwable, "Внутренняя ошибка сервера");
             }
         }
     }

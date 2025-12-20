@@ -3,6 +3,7 @@ package org.makson.guardbot.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,12 +14,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "prisoners")
 public class Prisoner {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     @Builder.Default
-    private LocalDateTime conclusionDate = LocalDateTime.now();
-    private LocalDateTime releaseDate;
+    private LocalDate conclusionDate = LocalDate.now();
+    private LocalDate releaseDate;
     private Integer prisonCell;
     private String reason;
 }

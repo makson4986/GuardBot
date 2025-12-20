@@ -76,8 +76,13 @@ public class PrisonCommands extends ApplicationCommand {
     public void onSlashAmendReleaseDate(
             GuildSlashEvent event,
             @SlashOption(name = "username", description = "Кому необходимо изменить срок") String username,
-            @SlashOption(name = "date", description = "Дата и время в формате дд.мм.гггг") String newDate) {
+            @SlashOption(name = "date", description = "Дата и время в формате гггг-мм-дд") String newDate) {
 
+        event.deferReply().queue();
+
+        prisonService.changeReleaseDate(username, LocalDate.parse(newDate));
+
+        event.getHook().sendMessage("Дата освобождения изменена").queue();
     }
 
     @JDASlashCommand(name = "prison", subcommand = "free", description = "Освободить из тюрьмы")

@@ -9,6 +9,7 @@ import org.makson.guardbot.repositories.PrisonerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,5 +45,16 @@ public class PrisonerService {
     @Transactional()
     public void deleteByName(String name) {
         prisonRepository.deleteByName(name);
+    }
+
+    @Transactional()
+    public void changeReleaseDate(String name, LocalDate newDate) {
+        Optional<Prisoner> maybePrisoner = prisonRepository.findByName(name);
+
+        if (maybePrisoner.isEmpty()) {
+            throw new PrisonerNotFoundException("Prisoner with name " + name + " not found");
+        }
+
+        maybePrisoner.get().setReleaseDate(newDate);
     }
 }
