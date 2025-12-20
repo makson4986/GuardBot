@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS prison
 (
     id              SERIAL PRIMARY KEY,
     name            VARCHAR(64) NOT NULL,
-    conclusion_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    release_date    TIMESTAMP   NOT NULL,
+    conclusion_date DATE DEFAULT CURRENT_TIMESTAMP,
+    release_date    DATE   NOT NULL,
     prison_cell     int         NOT NULL,
     reason          TEXT        NOT NULL
 );
