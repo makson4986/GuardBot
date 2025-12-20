@@ -7,7 +7,9 @@ import org.makson.guardbot.mappers.PrisonerMapper;
 import org.makson.guardbot.models.Prisoner;
 import org.makson.guardbot.repositories.PrisonerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,6 +18,7 @@ public class PrisonerService {
     private final PrisonerRepository prisonRepository;
     private final PrisonerMapper mapper;
 
+    @Transactional(readOnly = true)
     public PrisonerResponseDto getInfoPrisoner(String username) {
         Optional<Prisoner> maybePrisoner = prisonRepository.findByName(username);
 
@@ -24,5 +27,11 @@ public class PrisonerService {
         }
 
         return mapper.mapPrisoner(maybePrisoner.get());
+    }
+
+    @Transactional(readOnly = true)
+    public List<PrisonerResponseDto> getAllPrisoners() {
+        List<Prisoner> prisoners = prisonRepository.findAll();
+        return mapper.mapListPrisoner(prisoners);
     }
 }

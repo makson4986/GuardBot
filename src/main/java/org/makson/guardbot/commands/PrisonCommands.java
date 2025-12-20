@@ -13,6 +13,8 @@ import org.makson.guardbot.dto.PrisonerResponseDto;
 import org.makson.guardbot.services.EmbedMessageService;
 import org.makson.guardbot.services.PrisonerService;
 
+import java.util.List;
+
 @Command
 @RequiredArgsConstructor
 public class PrisonCommands extends ApplicationCommand {
@@ -22,7 +24,12 @@ public class PrisonCommands extends ApplicationCommand {
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
     @JDASlashCommand(name = "prison", subcommand = "list", description = "Получить информацию о заключенных")
     public void onSlashGetPrisonList(GuildSlashEvent event) {
+        event.deferReply().queue();
 
+        List<PrisonerResponseDto> prisoners = prisonService.getAllPrisoners();
+        MessageEmbed answer = embedMessageService.createInfoPrisonEmbed(prisoners);
+
+        event.getHook().sendMessageEmbeds(answer).queue();
     }
 
     @JDASlashCommand(name = "prison", subcommand = "info", description = "Получить информацию о заключенном")

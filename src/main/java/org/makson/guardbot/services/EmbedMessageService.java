@@ -27,7 +27,7 @@ public class EmbedMessageService {
 
     public MessageEmbed createAllInfoEmbed(List<GuardsmanInfoDto> guardsmen) {
         return new EmbedBuilder()
-                .setTitle("Информация о гвардейцах")
+                .setTitle("Гвардейцы")
                 .setColor(0xFF0000)
                 .setDescription(
                         guardsmen.stream()
@@ -141,6 +141,18 @@ public class EmbedMessageService {
                         "```" + logDto.command() + "```",
                         "```" + logDto.description() + "```"
                 ))
+                .build();
+    }
+
+    public MessageEmbed createInfoPrisonEmbed(List<PrisonerResponseDto> prisoners) {
+        return new EmbedBuilder()
+                .setTitle("Заключенные")
+                .setColor(Color.GRAY)
+                .setDescription(
+                        prisoners.stream()
+                                .map(PrisonerResponseDto::name)
+                                .collect(Collectors.joining("\n"))
+                )
                 .build();
     }
 
