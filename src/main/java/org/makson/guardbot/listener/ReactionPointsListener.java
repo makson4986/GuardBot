@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.entities.MessageReaction;
 import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
-import org.makson.guardbot.DiscordLogger;
+import org.makson.guardbot.utils.DiscordLogger;
 import org.makson.guardbot.dto.LogDto;
 import org.makson.guardbot.services.ReactionPointsService;
 

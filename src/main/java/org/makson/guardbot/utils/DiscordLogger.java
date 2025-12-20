@@ -1,4 +1,4 @@
-package org.makson.guardbot;
+package org.makson.guardbot.utils;
 
 import io.github.freya022.botcommands.api.core.annotations.BEventListener;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +10,6 @@ import org.makson.guardbot.exceptions.ChannelNotFoundException;
 import org.makson.guardbot.services.EmbedMessageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -43,23 +41,12 @@ public class DiscordLogger {
     }
 
     private void createLog(LogDto logDto, String level) {
-        String logText = """
-                %s %s %s
-                %s
-                %s""".formatted(
-                LocalDateTime.now(),
-                level,
-                logDto.user() == null ? "" : logDto.user(),
-                logDto.command() == null ? "" : "```" + logDto.command() + "```",
-                logDto.description()
-        );
-
         TextChannel logChannel = guild.getTextChannelById(logChannelId);
 
         if (logChannel == null) {
             throw new ChannelNotFoundException("The channel with the specified ID was not found");
         }
 
-        logChannel.sendMessage(logText).queue();
+        logChannel.sendMessageEmbeds(embedMessageService.createLogEmbed(logDto, level)).queue();
     }
 }

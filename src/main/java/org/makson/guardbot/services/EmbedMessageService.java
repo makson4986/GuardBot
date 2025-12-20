@@ -118,6 +118,32 @@ public class EmbedMessageService {
                 .build();
     }
 
+    public MessageEmbed createLogEmbed(LogDto logDto, String level) {
+        Color logColor;
+
+        switch (level) {
+            case "WARN" -> logColor = Color.ORANGE;
+            case "ERROR" -> logColor = Color.RED;
+            default -> logColor = Color.GREEN;
+        }
+
+        return new EmbedBuilder()
+                .setTitle(LocalDateTime.now().toString())
+                .setColor(logColor)
+                .setDescription("""
+                        **Level:** %s
+                        **User:** %s
+                        **Commands:** %s
+                        **Description:** %s
+                        """.formatted(
+                        level,
+                        logDto.user(),
+                        "```" + logDto.command() + "```",
+                        "```" + logDto.description() + "```"
+                ))
+                .build();
+    }
+
     private String getDepartment(List<String> departments) {
         if (departments.isEmpty()) {
             return "Отсутствуют";
