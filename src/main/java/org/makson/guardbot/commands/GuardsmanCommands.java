@@ -104,9 +104,13 @@ public class GuardsmanCommands extends ApplicationCommand {
     public void onSlashChangePointsGuardsman(
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "У кого необходимо изменить") User guardsman,
-            @SlashOption(name = "quantity", description = "На сколько изменить, (пример 10, -15)") Integer quantity
+            @SlashOption(name = "quantity", description = "На сколько изменить (пример 10, -15)") Integer quantity
     ) {
+        event.deferReply().queue();
 
+        guardsmanService.changePoints(guardsman.getEffectiveName(), quantity);
+
+        event.getHook().sendMessage("Баллы были изменены").queue();
     }
 
     private Member defineMember(GuildSlashEvent event, User user) {
