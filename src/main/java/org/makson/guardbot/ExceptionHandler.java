@@ -13,10 +13,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.makson.guardbot.dto.LogDto;
-import org.makson.guardbot.exceptions.ChannelNotFoundException;
-import org.makson.guardbot.exceptions.DepartmentNotFoundException;
-import org.makson.guardbot.exceptions.GuardsmanNotFoundException;
-import org.makson.guardbot.exceptions.ReportParseException;
+import org.makson.guardbot.exceptions.*;
 import org.makson.guardbot.services.EmbedMessageService;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -51,6 +48,8 @@ public class ExceptionHandler implements GlobalExceptionHandler {
             case ChannelNotFoundException _ ->
                     handleChannelNotFoundException((SlashCommandInteractionEvent) event, throwable);
             case ReportParseException _ -> handleReportParseException((SlashCommandInteractionEvent) event, throwable);
+            case PrisonerNotFoundException _ ->
+                    handlePrisonerNotFoundException((SlashCommandInteractionEvent) event, throwable);
             default -> {
             }
         }
@@ -94,6 +93,18 @@ public class ExceptionHandler implements GlobalExceptionHandler {
 
     private void handleReportParseException(SlashCommandInteractionEvent event, Throwable throwable) {
         MessageEmbed answer = embedMessageService.createErrorEmbed("Ошибка при формировании отчета");
+
+        logger.error(new LogDto(
+                event.getUser(),
+                event.getCommandString(),
+                throwable.getMessage()
+        ));
+
+        event.getHook().sendMessageEmbeds(answer).queue();
+    }
+
+    private void handlePrisonerNotFoundException(SlashCommandInteractionEvent event, Throwable throwable) {
+        MessageEmbed answer = embedMessageService.createErrorEmbed("Заключенный не найден");
 
         logger.error(new LogDto(
                 event.getUser(),
