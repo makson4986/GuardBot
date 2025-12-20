@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS guardsmen
 --rollback DROP TABLE guardsman;
 
 --changeset makson:3
-CREATE TABLE IF NOT EXISTS prison
+CREATE TABLE IF NOT EXISTS prisoners
 (
     id              SERIAL PRIMARY KEY,
     name            VARCHAR(64) NOT NULL,

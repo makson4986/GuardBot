@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "prison")
-public class Prison {
+@Table(name = "prisoners")
+public class Prisoner {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;

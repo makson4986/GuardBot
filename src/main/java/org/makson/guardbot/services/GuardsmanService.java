@@ -4,7 +4,6 @@ package org.makson.guardbot.services;
 import lombok.RequiredArgsConstructor;
 import org.makson.guardbot.dto.GuardsmanInfoDto;
 import org.makson.guardbot.exceptions.GuardsmanNotFoundException;
-import org.makson.guardbot.mappers.GuardsmanMapper;
 import org.makson.guardbot.models.Guardsman;
 import org.makson.guardbot.repositories.GuardsmanRepository;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import java.util.Optional;
 public class GuardsmanService {
     private final DepartmentService departmentService;
     private final GuardsmanRepository guardsmanRepository;
-    private final GuardsmanMapper mapper;
 
     @Transactional(readOnly = true)
     public GuardsmanInfoDto getGuardsman(String name) {

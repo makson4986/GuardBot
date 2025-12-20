@@ -8,16 +8,36 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.SlashOption;
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.TopLevelSlashCommandData;
 import lombok.RequiredArgsConstructor;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import org.makson.guardbot.dto.PrisonerResponseDto;
+import org.makson.guardbot.services.EmbedMessageService;
+import org.makson.guardbot.services.PrisonerService;
 
 @Command
 @RequiredArgsConstructor
 public class PrisonCommands extends ApplicationCommand {
+    private final PrisonerService prisonService;
+    private final EmbedMessageService embedMessageService;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
-    @JDASlashCommand(name = "prison", subcommand = "info", description = "Получить информацию о заключенных")
-    public void onSlashGetInfoPrison(GuildSlashEvent event) {
+    @JDASlashCommand(name = "prison", subcommand = "list", description = "Получить информацию о заключенных")
+    public void onSlashGetPrisonList(GuildSlashEvent event) {
 
     }
+
+    @JDASlashCommand(name = "prison", subcommand = "info", description = "Получить информацию о заключенном")
+    public void onSlashGetPrisonerInfo(
+            GuildSlashEvent event,
+            @SlashOption(name = "username", description = "Имя заключенного") String username
+    ) {
+        event.deferReply().queue();
+
+        PrisonerResponseDto infoPrisoner = prisonService.getInfoPrisoner(username);
+        MessageEmbed answer = embedMessageService.createInfoPrisonerEmbed(infoPrisoner);
+
+        event.getHook().sendMessageEmbeds(answer).queue();
+    }
+
 
     @JDASlashCommand(name = "prison", subcommand = "put", description = "Посадить в тюрьму")
     public void onSlashPutPrison(

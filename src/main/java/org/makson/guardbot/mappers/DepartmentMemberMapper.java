@@ -13,8 +13,4 @@ public interface DepartmentMemberMapper {
     DepartmentMemberDto mapDepartmentMember(DepartmentMember departmentMember);
 
     List<DepartmentMemberDto> mapDepartmentMember(List<DepartmentMember> departmentMembers);
-//
-//    default String mapDepartmentToString(DepartmentMember departmentMember) {
-//        return departmentMember.getDepartment().getName();
-//    }
 }

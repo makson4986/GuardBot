@@ -7,6 +7,7 @@ import org.makson.guardbot.dto.*;
 import org.makson.guardbot.models.DepartmentRole;
 
 import java.awt.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -99,6 +100,24 @@ public class EmbedMessageService {
                 .build();
     }
 
+    public MessageEmbed createInfoPrisonerEmbed(PrisonerResponseDto prisonResponseDto) {
+        return new EmbedBuilder()
+                .setTitle("Информация о " + prisonResponseDto.name())
+                .setColor(Color.GRAY)
+                .setDescription("""
+                        **Дата заключения:** %s
+                        **Дата осовобождения:** %s
+                        **Тюремная камера:** %s
+                        **Причина:** %s
+                        """.formatted(
+                        changeDateFormat(prisonResponseDto.conclusionDate()),
+                        changeDateFormat(prisonResponseDto.releaseDate()),
+                        prisonResponseDto.prisonCell(),
+                        prisonResponseDto.reason()
+                ))
+                .build();
+    }
+
     private String getDepartment(List<String> departments) {
         if (departments.isEmpty()) {
             return "Отсутствуют";
@@ -150,6 +169,11 @@ public class EmbedMessageService {
                 **Ранг:** %s
                 **Отделы:** %s
                 """;
+    }
+
+    private String changeDateFormat(LocalDate localDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        return localDate.format(formatter);
     }
 
 }
