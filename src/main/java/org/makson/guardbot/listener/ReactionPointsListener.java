@@ -5,6 +5,7 @@ import io.github.freya022.botcommands.api.core.service.annotations.BService;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import org.makson.guardbot.DiscordLogger;
@@ -21,25 +22,30 @@ public class ReactionPointsListener {
 
     @BEventListener(mode = BEventListener.RunMode.ASYNC)
     public void addPoints(MessageReactionAddEvent event) {
-        final String confirmationReaction = "✅";
+        changePoints(event, false);
+    }
 
-        if (!event.getEmoji().getName().equals(confirmationReaction)) {
+    @BEventListener(mode = BEventListener.RunMode.ASYNC)
+    public void removePoints(MessageReactionRemoveEvent event) {
+        changePoints(event, true);
+    }
+
+    private void changePoints(GenericMessageReactionEvent event, boolean isDeletion) {
+        final String CONFIRMATION_REACTION = "✅";
+
+        if (!event.getEmoji().getName().equals(CONFIRMATION_REACTION)) {
             return;
         }
 
         Message message = event.retrieveMessage().complete();
         List<MessageReaction> reactions = message.getReactions();
 
-        reactionPointsService.addPoints(reactions, message);
+        reactionPointsService.addPoints(reactions, message, isDeletion);
 
         logger.info(new LogDto(
-                event.getUser(),
+                event.retrieveUser().complete(),
                 null,
-                "Баллы были добавлены"
+                "The points have been changed"
         ));
-    }
-
-    @BEventListener(mode = BEventListener.RunMode.ASYNC)
-    public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
     }
 }

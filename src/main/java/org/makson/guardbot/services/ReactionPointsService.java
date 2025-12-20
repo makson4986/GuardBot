@@ -31,7 +31,7 @@ public class ReactionPointsService {
             Map.entry("🔟", 10)
     );
 
-    public void addPoints(List<MessageReaction> reactions, Message message) {
+    public void addPoints(List<MessageReaction> reactions, Message message, boolean isDeletion) {
         MessageEmbed embedMessage = message.getEmbeds().getFirst();
         //TODO поставить не над embed галку
 
@@ -39,21 +39,7 @@ public class ReactionPointsService {
             return;
         }
 
-        int points = 0;
-        int n = reactions.size() - 1;
-
-        for (int i = 0; i < n; i++) {
-            String emoji = reactions.get(i).getEmoji().getName();
-
-            if (!POINTS.containsKey(emoji)) {
-                continue;
-            }
-
-            int digit = POINTS.get(emoji);
-            int power = n - 1 - i;
-
-            points += digit * (int) Math.pow(10, power);
-        }
+        int points = calculatePoints(reactions, isDeletion);
 
         List<String> usernames = reportParser.parseUsernamesFromReport(embedMessage.getDescription()).stream()
                 .map(reportParser::parseIdToUsernames)
@@ -62,6 +48,35 @@ public class ReactionPointsService {
         for (String username : usernames) {
             guardsmanService.changePoints(username, points);
         }
+    }
+
+    private int calculatePoints(List<MessageReaction> reactions, boolean isDeletion) {
+        int points = 0;
+        int quantityPointsReaction;
+
+        if (isDeletion) {
+            quantityPointsReaction = reactions.size();
+        } else {
+            quantityPointsReaction = reactions.size() - 1;
+        }
+
+        for (int i = 0; i < quantityPointsReaction; i++) {
+            String emoji = reactions.get(i).getEmoji().getName();
+
+            if (!POINTS.containsKey(emoji)) {
+                continue;
+            }
+
+            int digit = POINTS.get(emoji);
+            int power = quantityPointsReaction - 1 - i;
+
+            points += digit * (int) Math.pow(10, power);
+        }
+
+        if (isDeletion) {
+            points = points * -1;
+        }
+        return points;
     }
 
     private boolean isReport(MessageEmbed message) {

@@ -45,12 +45,12 @@ public class DiscordLogger {
     private void createLog(LogDto logDto, String level) {
         String logText = """
                 %s %s %s
-                ```%s```
+                %s
                 %s""".formatted(
                 LocalDateTime.now(),
                 level,
                 logDto.user() == null ? "" : logDto.user(),
-                logDto.command() == null ? "" : logDto.command(),
+                logDto.command() == null ? "" : "```" + logDto.command() + "```",
                 logDto.description()
         );
 
