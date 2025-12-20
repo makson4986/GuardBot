@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface PrisonerRepository extends JpaRepository<Prisoner, Integer> {
     Optional<Prisoner> findByName(String username);
+
+    void deleteByName(String name);
 }

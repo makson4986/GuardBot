@@ -9,9 +9,11 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.TopLevelSlashCommandData;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import org.makson.guardbot.dto.LogDto;
 import org.makson.guardbot.dto.PrisonerDto;
 import org.makson.guardbot.services.EmbedMessageService;
 import org.makson.guardbot.services.PrisonerService;
+import org.makson.guardbot.utils.DiscordLogger;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -67,7 +69,7 @@ public class PrisonCommands extends ApplicationCommand {
 
         prisonService.savePrisoner(prisonerDto);
 
-        event.getHook().sendMessage("Игрок посажен в тюрьму").queue();
+        event.getHook().sendMessage("Игрок посажен в тюрьму!").queue();
     }
 
     @JDASlashCommand(name = "prison", subcommand = "amend-release-date", description = "Изменить дату освобождения из тюрьмы")
@@ -82,8 +84,10 @@ public class PrisonCommands extends ApplicationCommand {
     public void onSlashFree(
             GuildSlashEvent event,
             @SlashOption(name = "username", description = "Кого необходимо освободить из тюрьмы") String username) {
+        event.deferReply().queue();
 
+        prisonService.deleteByName(username);
+
+        event.getHook().sendMessage("Игрок освобожден").queue();
     }
-
-
 }

@@ -40,4 +40,9 @@ public class PrisonerService {
         Prisoner prisoner = mapper.mapPrisonerDto(prisonerDto);
         prisonRepository.save(prisoner);
     }
+
+    @Transactional()
+    public void deleteByName(String name) {
+        prisonRepository.deleteByName(name);
+    }
 }
