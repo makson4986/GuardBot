@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS ranks
     max_points          INT                NOT NULL,
     max_special_reports INT                NOT NULL,
     position            INT                NOT NULL,
-    discord_role_id     BIGINT NOT NULL
+    discord_role_id     BIGINT             NOT NULL
 );
 --rollback DROP TABLE ranks;
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS prisoners
     id              SERIAL PRIMARY KEY,
     name            VARCHAR(64) NOT NULL,
     conclusion_date DATE DEFAULT CURRENT_TIMESTAMP,
-    release_date    DATE   NOT NULL,
+    release_date    DATE        NOT NULL,
     prison_cell     int         NOT NULL,
     reason          TEXT        NOT NULL
 );
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS department_members
     guardsman_id  INT,
     department_id INT,
     role          VARCHAR(32),
-    FOREIGN KEY (guardsman_id) REFERENCES guardsmen (id),
+    FOREIGN KEY (guardsman_id) REFERENCES guardsmen (id) ON DELETE CASCADE,
     FOREIGN KEY (department_id) REFERENCES departments (id)
 );
 --rollback DROP TABLE department_members;

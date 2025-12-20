@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface GuardsmanRepository extends JpaRepository<Guardsman, Integer> {
     Optional<Guardsman> findByName(String name);
+
+    void deleteByName(String name);
 }

@@ -8,14 +8,18 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.SlashOption;
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.TopLevelSlashCommandData;
 import lombok.RequiredArgsConstructor;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import org.makson.guardbot.dto.GuardsmanInfoDto;
+import org.makson.guardbot.exceptions.GuardsmanNotFoundException;
 import org.makson.guardbot.services.EmbedMessageService;
 import org.makson.guardbot.services.GuardsmanService;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
 
 @Command
 @RequiredArgsConstructor
@@ -65,7 +69,19 @@ public class GuardsmanCommands extends ApplicationCommand {
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого необходимо уволить") User guardsman
     ) {
+        event.deferReply().queue();
 
+        Guild guild = event.getGuild();
+        Member member = guild.retrieveMember(guardsman).complete();
+
+        if (member == null) {
+            throw new GuardsmanNotFoundException("Guardsman not found");
+        }
+
+        guild.modifyMemberRoles(member, Collections.emptyList(), member.getRoles()).queue();
+        guardsmanService.deleteGuardsman(guardsman.getEffectiveName());
+
+        event.getHook().sendMessage("Гвардеец " + guardsman.getEffectiveName() + " уволен!").queue();
     }
 
     @JDASlashCommand(name = "guardsmen", subcommand = "promote", description = "Повысить должность")

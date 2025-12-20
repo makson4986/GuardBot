@@ -59,6 +59,11 @@ public class GuardsmanService {
         guardsman.setPoints(guardsman.getPoints() + points);
     }
 
+    @Transactional
+    public void deleteGuardsman(String name) {
+        guardsmanRepository.deleteByName(name);
+    }
+
     private GuardsmanInfoDto createGuardsmanInfo(Guardsman guardsman) {
         return new GuardsmanInfoDto(
                 guardsman.getId(),
