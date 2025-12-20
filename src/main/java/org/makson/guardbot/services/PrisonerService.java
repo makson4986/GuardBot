@@ -1,7 +1,7 @@
 package org.makson.guardbot.services;
 
 import lombok.RequiredArgsConstructor;
-import org.makson.guardbot.dto.PrisonerResponseDto;
+import org.makson.guardbot.dto.PrisonerDto;
 import org.makson.guardbot.exceptions.PrisonerNotFoundException;
 import org.makson.guardbot.mappers.PrisonerMapper;
 import org.makson.guardbot.models.Prisoner;
@@ -19,7 +19,7 @@ public class PrisonerService {
     private final PrisonerMapper mapper;
 
     @Transactional(readOnly = true)
-    public PrisonerResponseDto getInfoPrisoner(String username) {
+    public PrisonerDto getInfoPrisoner(String username) {
         Optional<Prisoner> maybePrisoner = prisonRepository.findByName(username);
 
         if (maybePrisoner.isEmpty()) {
@@ -30,8 +30,14 @@ public class PrisonerService {
     }
 
     @Transactional(readOnly = true)
-    public List<PrisonerResponseDto> getAllPrisoners() {
+    public List<PrisonerDto> getAllPrisoners() {
         List<Prisoner> prisoners = prisonRepository.findAll();
         return mapper.mapListPrisoner(prisoners);
+    }
+
+    @Transactional()
+    public void savePrisoner(PrisonerDto prisonerDto) {
+        Prisoner prisoner = mapper.mapPrisonerDto(prisonerDto);
+        prisonRepository.save(prisoner);
     }
 }

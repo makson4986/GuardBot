@@ -2,8 +2,7 @@ package org.makson.guardbot.dto;
 
 import java.time.LocalDate;
 
-public record PrisonerResponseDto(
-        int id,
+public record PrisonerDto(
         String name,
         LocalDate conclusionDate,
         LocalDate releaseDate,

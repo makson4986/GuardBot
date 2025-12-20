@@ -100,13 +100,13 @@ public class EmbedMessageService {
                 .build();
     }
 
-    public MessageEmbed createInfoPrisonerEmbed(PrisonerResponseDto prisonResponseDto) {
+    public MessageEmbed createInfoPrisonerEmbed(PrisonerDto prisonResponseDto) {
         return new EmbedBuilder()
                 .setTitle("Информация о " + prisonResponseDto.name())
                 .setColor(Color.GRAY)
                 .setDescription("""
                         **Дата заключения:** %s
-                        **Дата осовобождения:** %s
+                        **Дата освобождения:** %s
                         **Тюремная камера:** %s
                         **Причина:** %s
                         """.formatted(
@@ -144,13 +144,13 @@ public class EmbedMessageService {
                 .build();
     }
 
-    public MessageEmbed createInfoPrisonEmbed(List<PrisonerResponseDto> prisoners) {
+    public MessageEmbed createInfoPrisonEmbed(List<PrisonerDto> prisoners) {
         return new EmbedBuilder()
                 .setTitle("Заключенные")
                 .setColor(Color.GRAY)
                 .setDescription(
                         prisoners.stream()
-                                .map(PrisonerResponseDto::name)
+                                .map(PrisonerDto::name)
                                 .collect(Collectors.joining("\n"))
                 )
                 .build();

@@ -9,10 +9,11 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.TopLevelSlashCommandData;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import org.makson.guardbot.dto.PrisonerResponseDto;
+import org.makson.guardbot.dto.PrisonerDto;
 import org.makson.guardbot.services.EmbedMessageService;
 import org.makson.guardbot.services.PrisonerService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Command
@@ -26,7 +27,7 @@ public class PrisonCommands extends ApplicationCommand {
     public void onSlashGetPrisonList(GuildSlashEvent event) {
         event.deferReply().queue();
 
-        List<PrisonerResponseDto> prisoners = prisonService.getAllPrisoners();
+        List<PrisonerDto> prisoners = prisonService.getAllPrisoners();
         MessageEmbed answer = embedMessageService.createInfoPrisonEmbed(prisoners);
 
         event.getHook().sendMessageEmbeds(answer).queue();
@@ -39,7 +40,7 @@ public class PrisonCommands extends ApplicationCommand {
     ) {
         event.deferReply().queue();
 
-        PrisonerResponseDto infoPrisoner = prisonService.getInfoPrisoner(username);
+        PrisonerDto infoPrisoner = prisonService.getInfoPrisoner(username);
         MessageEmbed answer = embedMessageService.createInfoPrisonerEmbed(infoPrisoner);
 
         event.getHook().sendMessageEmbeds(answer).queue();
@@ -49,8 +50,24 @@ public class PrisonCommands extends ApplicationCommand {
     @JDASlashCommand(name = "prison", subcommand = "put", description = "Посадить в тюрьму")
     public void onSlashPutPrison(
             GuildSlashEvent event,
-            @SlashOption(name = "username", description = "Ник заключенного") String username) {
+            @SlashOption(name = "username", description = "Ник заключенного") String username,
+            @SlashOption(name = "release-date", description = "Дата освобождения (в формате гггг-мм-дд)") String releaseDate,
+            @SlashOption(name = "prison-cell", description = "Тюремная камера") Integer prisonCell,
+            @SlashOption(name = "reason", description = "Причина") String reason
+    ) {
+        event.deferReply().queue();
 
+        PrisonerDto prisonerDto = new PrisonerDto(
+                username,
+                LocalDate.parse(releaseDate),
+                LocalDate.now(),
+                prisonCell,
+                reason
+        );
+
+        prisonService.savePrisoner(prisonerDto);
+
+        event.getHook().sendMessage("Игрок посажен в тюрьму").queue();
     }
 
     @JDASlashCommand(name = "prison", subcommand = "amend-release-date", description = "Изменить дату освобождения из тюрьмы")
