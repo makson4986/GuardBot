@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS guardsmen
 (
     id             SERIAL PRIMARY KEY,
     name           VARCHAR(64) UNIQUE NOT NULL,
-    rank_id        INT                NOT NULL,
+    rank_id        INT DEFAULT 1,
     points         INT DEFAULT 0,
     special_report INT DEFAULT 0,
     last_report    DATE,

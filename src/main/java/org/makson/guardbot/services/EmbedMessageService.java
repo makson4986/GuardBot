@@ -84,6 +84,14 @@ public class EmbedMessageService {
             descriptionTemplate = getRankedInfoDescription();
         }
 
+        String lastReport;
+
+        if (guardsman.lastReport() == null) {
+            lastReport = "Отсутствует";
+        } else {
+            lastReport = guardsman.lastReport().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        }
+
         return new EmbedBuilder()
                 .setTitle("Информация о %s".formatted(guardsman.name()))
                 .setColor(color)
@@ -95,7 +103,7 @@ public class EmbedMessageService {
                         guardsman.requiredPoints(),
                         guardsman.specialReport(),
                         guardsman.requiredSpecialReport(),
-                        guardsman.lastReport().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+                        lastReport
                 ))
                 .build();
     }

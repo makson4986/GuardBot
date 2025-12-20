@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.makson.guardbot.dto.GuardsmanInfoDto;
 import org.makson.guardbot.exceptions.GuardsmanNotFoundException;
 import org.makson.guardbot.models.Guardsman;
+import org.makson.guardbot.models.Rank;
 import org.makson.guardbot.repositories.GuardsmanRepository;
+import org.makson.guardbot.repositories.RankRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class GuardsmanService {
     private final DepartmentService departmentService;
     private final GuardsmanRepository guardsmanRepository;
+    private final RankRepository rankRepository;
 
     @Transactional(readOnly = true)
     public GuardsmanInfoDto getGuardsman(String name) {
@@ -39,12 +42,6 @@ public class GuardsmanService {
                 .toList();
     }
 
-
-//    public void saveGuardsman(GuardsmanCreatingDto guardsmanDto) {
-//        Guardsman guardsman = mapper.mapGuardsmanDto(guardsmanDto);
-//        guardsmanRepository.save(guardsman);
-//    }
-
     @Transactional
     public void updateLastReportDate(String name, LocalDate date) {
         Guardsman guardsman = guardsmanRepository.findByName(name)
@@ -62,6 +59,20 @@ public class GuardsmanService {
     @Transactional
     public void deleteGuardsman(String name) {
         guardsmanRepository.deleteByName(name);
+    }
+
+    @Transactional
+    public void saveGuardsman(String name) {
+        int defaultRankId = 1;
+
+        Rank rank = rankRepository.getReferenceById(defaultRankId);
+
+        Guardsman guardsman = Guardsman.builder()
+                .name(name)
+                .rank(rank)
+                .build();
+
+        guardsmanRepository.save(guardsman);
     }
 
     private GuardsmanInfoDto createGuardsmanInfo(Guardsman guardsman) {

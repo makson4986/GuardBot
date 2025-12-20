@@ -42,18 +42,20 @@ public class ExceptionHandler implements GlobalExceptionHandler {
         }
 
         switch (throwable) {
-            case DepartmentNotFoundException departmentNotFoundException ->
+            case DepartmentNotFoundException _ ->
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Отдел не найден");
-            case GuardsmanNotFoundException guardsmanNotFoundException ->
+            case GuardsmanNotFoundException _ ->
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Гвардеец не найден");
-            case ChannelNotFoundException channelNotFoundException ->
+            case ChannelNotFoundException _ ->
                     handleError((SlashCommandInteractionEvent) event, throwable, "Внутренняя ошибка сервера");
-            case ReportParseException reportParseException ->
+            case ReportParseException _ ->
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Ошибка при формировании отчета, проверьте данные");
-            case PrisonerNotFoundException prisonerNotFoundException ->
+            case PrisonerNotFoundException _ ->
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Заключенный не найден");
-            case DateTimeParseException dateTimeParseException ->
+            case DateTimeParseException _ ->
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Неверный формат даты");
+            case RoleNotFoundException _ ->
+                    handleWarn((SlashCommandInteractionEvent) event, throwable, "Внутренняя ошибка сервера");
             default -> {
                 handleError((SlashCommandInteractionEvent) event, throwable, "Внутренняя ошибка сервера");
             }

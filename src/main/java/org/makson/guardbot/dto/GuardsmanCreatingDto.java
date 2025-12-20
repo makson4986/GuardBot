@@ -6,7 +6,6 @@ import java.util.List;
 public record GuardsmanCreatingDto(
         String name,
         RankDto rank,
-        List<DepartmentInfoDto> departments,
         LocalDate lastReport
 ) {
 }
