@@ -42,24 +42,24 @@ public class ExceptionHandler implements GlobalExceptionHandler {
         }
 
         switch (throwable) {
-            case DepartmentNotFoundException _ ->
+            case DepartmentNotFoundException ex ->
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Отдел не найден");
-            case GuardsmanNotFoundException _ ->
+            case GuardsmanNotFoundException ex ->
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Гвардеец не найден");
-            case ChannelNotFoundException _ ->
+            case ChannelNotFoundException ex ->
                     handleError((SlashCommandInteractionEvent) event, throwable, "Внутренняя ошибка сервера");
-            case ReportParseException _ ->
+            case ReportParseException ex ->
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Ошибка при формировании отчета, проверьте данные");
-            case PrisonerNotFoundException _ ->
+            case PrisonerNotFoundException ex ->
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Заключенный не найден");
-            case DateTimeParseException _ ->
+            case DateTimeParseException ex ->
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Неверный формат даты");
-            case RoleNotFoundException _ ->
+            case RoleNotFoundException ex ->
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Внутренняя ошибка сервера");
-            case DepartmentMemberAlreadyExistsException _ ->
-                handleWarn((SlashCommandInteractionEvent) event, throwable,"Гвардеец уже добавлен в отдел");
-            case RankLimitReachedException _ ->
-                handleWarn((SlashCommandInteractionEvent) event, throwable, "Гвардеец достиг максимально/минимально допустимого ранга");
+            case DepartmentMemberAlreadyExistsException ex ->
+                    handleWarn((SlashCommandInteractionEvent) event, throwable, "Гвардеец уже добавлен в отдел");
+            case RankLimitReachedException ex ->
+                    handleWarn((SlashCommandInteractionEvent) event, throwable, "Гвардеец достиг максимально/минимально допустимого ранга");
             default -> {
                 handleError((SlashCommandInteractionEvent) event, throwable, "Внутренняя ошибка сервера");
             }

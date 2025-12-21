@@ -1,4 +1,4 @@
-FROM gradle:8.14.3-jdk23 AS builder
+FROM gradle:8.14.3-jdk21 AS builder
 
 WORKDIR /home/gradle/project
 
@@ -6,7 +6,7 @@ COPY --chown=gradle:gradle . .
 
 RUN gradle clean bootJar --no-daemon
 
-FROM eclipse-temurin:23-jre-jammy
+FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
 
