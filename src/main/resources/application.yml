@@ -10,8 +10,9 @@ spring:
     change-log: classpath:/db/changelog/db.changelog-master.yml
 discord:
   token: ${DISCORD_TOKEN}
-  report-channel-id: ${DISCORD_REPORT_CHANNEL_ID}
+  special-report-channel-id: ${DISCORD_SPECIAL_REPORT_CHANNEL_ID}
   log-channel-id: ${DISCORD_LOG_CHANNEL_ID}
+  report-channel-id: ${DISCORD_REPORT_CHANNEL_ID}
   guild-id: ${DISCORD_GUILD_ID}
 botcommands:
   core:

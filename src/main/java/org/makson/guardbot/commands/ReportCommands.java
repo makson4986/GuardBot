@@ -8,13 +8,14 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.SlashOption;
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.TopLevelSlashCommandData;
 import lombok.RequiredArgsConstructor;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.makson.guardbot.commands.autocompletes.ReportTypeAutocomplete;
 import org.makson.guardbot.dto.ReportDto;
+import org.makson.guardbot.dto.SpecialReportDto;
 import org.makson.guardbot.exceptions.ChannelNotFoundException;
 import org.makson.guardbot.services.EmbedMessageService;
+import org.makson.guardbot.services.GuardsmanService;
 import org.makson.guardbot.services.ReportService;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -25,10 +26,13 @@ import java.util.Optional;
 @Command
 @RequiredArgsConstructor
 public class ReportCommands extends ApplicationCommand {
+    @Value("${discord.special-report-channel-id}")
+    private String specialReportChannelId;
     @Value("${discord.report-channel-id}")
     private String reportChannelId;
-    private final EmbedMessageService replyMessageService;
+    private final EmbedMessageService embedMessageService;
     private final ReportService reportService;
+    private final GuardsmanService guardsmanService;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
     @JDASlashCommand(name = "report-create", description = "Создать отчет")
@@ -40,17 +44,17 @@ public class ReportCommands extends ApplicationCommand {
             @Nullable @SlashOption(name = "media", description = "Фото/видео доказательства") Message.Attachment attachment,
             @Nullable @SlashOption(name = "media-url", description = "Ссылка на фото/видео") String mediaUrl) {
         event.deferReply().queue();
-        TextChannel reportChannel = event.getGuild().getTextChannelById(reportChannelId);
+        TextChannel reportChannel = event.getGuild().getTextChannelById(specialReportChannelId);
 
         if (reportChannel == null) {
-            throw new ChannelNotFoundException("The channel with the specified ID was not found");
+            throw new ChannelNotFoundException("The channel for special reports with the specified ID was not found");
         }
 
-        ReportDto reportDto = new ReportDto(List.of(usernames), type, description, mediaUrl, Optional.ofNullable(attachment));
+        SpecialReportDto specialReportDto = new SpecialReportDto(List.of(usernames), type, description, mediaUrl, Optional.ofNullable(attachment));
 
-        ReportDto parsedReport = reportService.create(reportDto);
+        SpecialReportDto parsedReport = reportService.create(specialReportDto);
 
-        MessageEmbed reportEmbed = replyMessageService.createReportEmbed(parsedReport);
+        MessageEmbed reportEmbed = embedMessageService.createSpecialReportEmbed(parsedReport);
 
         reportChannel.sendMessageEmbeds(reportEmbed).queue();
 
@@ -62,5 +66,29 @@ public class ReportCommands extends ApplicationCommand {
         }
 
         event.getHook().sendMessage("Отчет отправлен!").queue();
+    }
+
+    @JDASlashCommand(name = "issue-report", description = "Выдать рапорт")
+    public void onSlashIssueReport(
+            GuildSlashEvent event,
+            @SlashOption(name = "usernames", description = "На кого рапорт") User user,
+            @SlashOption(name = "reason", description = "Причина нарушения") String reason,
+            @SlashOption(name = "points", description = "Количество снимаемых баллов") int points) {
+        event.deferReply().queue();
+
+        Guild guild = event.getGuild();
+        Member member = guild.retrieveMember(user).complete();
+        TextChannel reportChannel = guild.getTextChannelById(reportChannelId);
+
+        if (reportChannel == null) {
+            throw new ChannelNotFoundException("The channel for report with the specified ID was not found");
+        }
+
+        guardsmanService.changePoints(member.getEffectiveName(), points * -1);
+
+        MessageEmbed answer = embedMessageService.createReportEmbed(new ReportDto(member.getEffectiveName(), reason, points));
+
+        reportChannel.sendMessageEmbeds(answer).queue();
+        event.getHook().sendMessage("Рапорт отправлен!").queue();
     }
 }

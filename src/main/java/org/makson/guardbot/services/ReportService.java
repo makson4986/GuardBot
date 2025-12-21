@@ -2,7 +2,7 @@ package org.makson.guardbot.services;
 
 import lombok.RequiredArgsConstructor;
 import org.makson.guardbot.dto.GuardsmanInfoDto;
-import org.makson.guardbot.dto.ReportDto;
+import org.makson.guardbot.dto.SpecialReportDto;
 import org.makson.guardbot.utils.ReportParser;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +15,8 @@ public class ReportService {
     private final GuardsmanService guardsmanService;
     private final ReportParser reportParser;
 
-    public ReportDto create(ReportDto reportDto) {
-        List<String> guardsmen = reportParser.parseUsernames(reportDto.names().getFirst(), "Parameter 'usernames' is missing");
+    public SpecialReportDto create(SpecialReportDto specialReportDto) {
+        List<String> guardsmen = reportParser.parseUsernames(specialReportDto.names().getFirst(), "Parameter 'usernames' is missing");
 
 
         List<GuardsmanInfoDto> guardsmenDto = guardsmen.stream()
@@ -31,12 +31,12 @@ public class ReportService {
                 );
 
 
-        return new ReportDto(
+        return new SpecialReportDto(
                 guardsmen,
-                reportParser.parseRequiredParameter(reportDto.type(), "Parameter 'type' is missing"),
-                reportParser.parseOptionalParameter(reportDto.description()),
-                reportParser.parseOptionalParameter(reportDto.mediaUrl()),
-                reportDto.media()
+                reportParser.parseRequiredParameter(specialReportDto.type(), "Parameter 'type' is missing"),
+                reportParser.parseOptionalParameter(specialReportDto.description()),
+                reportParser.parseOptionalParameter(specialReportDto.mediaUrl()),
+                specialReportDto.media()
         );
     }
 }

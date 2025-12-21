@@ -37,7 +37,7 @@ public class EmbedMessageService {
                 .build();
     }
 
-    public MessageEmbed createReportEmbed(ReportDto reportDto) {
+    public MessageEmbed createSpecialReportEmbed(SpecialReportDto specialReportDto) {
         return new EmbedBuilder()
                 .setTitle("Отчет от " + createReportDate())
                 .setColor(0xFF0000)
@@ -50,10 +50,10 @@ public class EmbedMessageService {
                                 %s
                                 
                                 """.formatted(
-                                String.join(" ", reportDto.names()),
-                                reportDto.type(),
-                                reportDto.description(),
-                                reportDto.mediaUrl()
+                                String.join(" ", specialReportDto.names()),
+                                specialReportDto.type(),
+                                specialReportDto.description(),
+                                specialReportDto.mediaUrl()
                         )
                 )
                 .build();
@@ -164,6 +164,22 @@ public class EmbedMessageService {
                 .build();
     }
 
+    public MessageEmbed createReportEmbed(ReportDto reportDto) {
+        return new EmbedBuilder()
+                .setTitle("Рапорт от " + createReportDate())
+                .setColor(Color.RED)
+                .setDescription("""
+                        1. %s
+                        2. %s
+                        3. -%s баллов
+                        """.formatted(
+                        reportDto.name(),
+                        reportDto.reason(),
+                        reportDto.points()
+                ))
+                .build();
+    }
+
     private String getDepartment(List<String> departments) {
         if (departments.isEmpty()) {
             return "Отсутствуют";
@@ -221,5 +237,4 @@ public class EmbedMessageService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return localDate.format(formatter);
     }
-
 }
