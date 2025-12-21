@@ -18,6 +18,8 @@ services:
     restart: unless-stopped
     depends_on:
       - postgres
+    env_file:
+      - .env
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/guard
       SPRING_DATASOURCE_USERNAME: postgres
