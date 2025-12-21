@@ -30,14 +30,14 @@ public class GuardsmanCommands extends ApplicationCommand {
     private final EmbedMessageService replyMessageService;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
-    @JDASlashCommand(name = "guardsmen", subcommand = "list", description = "Список всех гвардейцев")
+    @JDASlashCommand(name = "guardsmen-list",  description = "Список всех гвардейцев")
     public void onSlashListGuardsmen(GuildSlashEvent event) {
         event.deferReply(false).queue();
         var allGuardsman = guardsmanService.getAllGuardsman();
         event.getHook().sendMessageEmbeds(replyMessageService.createAllInfoEmbed(allGuardsman)).queue();
     }
 
-    @JDASlashCommand(name = "guardsmen", subcommand = "info", description = "Получить подробную информацию")
+    @JDASlashCommand(name = "guardsmen-info", description = "Получить подробную информацию")
     public void onSlashGetInfo(
             GuildSlashEvent event,
             @Nullable
@@ -58,7 +58,7 @@ public class GuardsmanCommands extends ApplicationCommand {
         event.getHook().sendMessageEmbeds(answer).queue();
     }
 
-    @JDASlashCommand(name = "guardsmen", subcommand = "hire", description = "Нанять")
+    @JDASlashCommand(name = "guardsmen-hire", description = "Нанять")
     public void onSlashHireGuardsman(
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого необходимо нанять") User guardsman
@@ -80,7 +80,7 @@ public class GuardsmanCommands extends ApplicationCommand {
 
     }
 
-    @JDASlashCommand(name = "guardsmen", subcommand = "dismiss", description = "Уволить")
+    @JDASlashCommand(name = "guardsmen-dismiss", description = "Уволить")
     public void onSlashDismissGuardsman(
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого необходимо уволить") User guardsman
@@ -100,7 +100,7 @@ public class GuardsmanCommands extends ApplicationCommand {
         event.getHook().sendMessage("Гвардеец " + guardsman.getEffectiveName() + " уволен!").queue();
     }
 
-    @JDASlashCommand(name = "guardsmen", subcommand = "promote", description = "Повысить должность")
+    @JDASlashCommand(name = "guardsmen-promote", description = "Повысить должность")
     public void onSlashPromoteGuardsman(
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого необходимо повысить") User guardsman
@@ -113,7 +113,7 @@ public class GuardsmanCommands extends ApplicationCommand {
         event.getHook().sendMessage("Гвардеец был повышен").queue();
     }
 
-    @JDASlashCommand(name = "guardsmen", subcommand = "demote", description = "Понизить должность")
+    @JDASlashCommand(name = "guardsmen-demote", description = "Понизить должность")
     public void onSlashDemoteGuardsman(
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого необходимо понизить") User guardsman
@@ -126,7 +126,7 @@ public class GuardsmanCommands extends ApplicationCommand {
         event.getHook().sendMessage("Гвардеец был понижен").queue();
     }
 
-    @JDASlashCommand(name = "guardsmen", subcommand = "points", description = "Изменить количество баллов")
+    @JDASlashCommand(name = "guardsmen-points", description = "Изменить количество баллов")
     public void onSlashChangePointsGuardsman(
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "У кого необходимо изменить") User guardsman,

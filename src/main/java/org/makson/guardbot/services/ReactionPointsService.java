@@ -31,7 +31,7 @@ public class ReactionPointsService {
             Map.entry("🔟", 10)
     );
 
-    public void addPoints(List<MessageReaction> reactions, Message message, boolean isDeletion) {
+    public void changePoints(List<MessageReaction> reactions, Message message, boolean isDeletion) {
         MessageEmbed embedMessage = message.getEmbeds().getFirst();
         //TODO поставить не над embed галку
 

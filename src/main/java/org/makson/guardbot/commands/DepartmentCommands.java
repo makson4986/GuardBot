@@ -29,7 +29,7 @@ public class DepartmentCommands extends ApplicationCommand {
     private final EmbedMessageService embedMessageService;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
-    @JDASlashCommand(name = "department", subcommand = "info", description = "Получить информацию об отделе")
+    @JDASlashCommand(name = "department-info", description = "Получить информацию об отделе")
     public void onSlashGetInfoDepartment(
             GuildSlashEvent event,
             @SlashOption(name = "name", description = "Выбери отдел", autocomplete = DepartmentAutocomplete.DEPARTMENT_AUTOCOMPLETE_NAME) String name) {
@@ -41,7 +41,7 @@ public class DepartmentCommands extends ApplicationCommand {
         event.getHook().sendMessageEmbeds(departmentInfoEmbed).queue();
     }
 
-    @JDASlashCommand(name = "department", subcommand = "add-member", description = "Добавить в отдел")
+    @JDASlashCommand(name = "department-add-member", description = "Добавить в отдел")
     public void onSlashAddToDepartment(
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого добавить в отдел") User guardsman,
@@ -73,7 +73,7 @@ public class DepartmentCommands extends ApplicationCommand {
         event.getHook().sendMessage("Гвардеец добавлен в отдел").queue();
     }
 
-    @JDASlashCommand(name = "department", subcommand = "remove-member", description = "Удалить из отдела")
+    @JDASlashCommand(name = "department-remove-member", description = "Удалить из отдела")
     public void onSlashDeleteFromDepartment(
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого удалить из отдела") User guardsman,

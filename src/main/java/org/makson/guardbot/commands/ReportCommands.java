@@ -31,7 +31,7 @@ public class ReportCommands extends ApplicationCommand {
     private final ReportService reportService;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
-    @JDASlashCommand(name = "report", subcommand = "create", description = "Создать отчет")
+    @JDASlashCommand(name = "report-create", description = "Создать отчет")
     public void onSlashCreateReport(
             GuildSlashEvent event,
             @SlashOption(name = "usernames", description = "Ник(и) игрока(ов) предоставляющих отчет") String usernames,

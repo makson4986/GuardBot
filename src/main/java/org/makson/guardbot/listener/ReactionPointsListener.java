@@ -40,7 +40,7 @@ public class ReactionPointsListener {
         Message message = event.retrieveMessage().complete();
         List<MessageReaction> reactions = message.getReactions();
 
-        reactionPointsService.addPoints(reactions, message, isDeletion);
+        reactionPointsService.changePoints(reactions, message, isDeletion);
 
         logger.info(new LogDto(
                 event.retrieveUser().complete(),
