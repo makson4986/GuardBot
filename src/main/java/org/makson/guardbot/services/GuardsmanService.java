@@ -54,15 +54,22 @@ public class GuardsmanService {
     }
 
     @Transactional
-    public void changePoints(String name, int points) {
+    public void changePoints(String name, int quantity) {
         Guardsman guardsman = guardsmanRepository.findByName(name)
                 .orElseThrow(() -> new GuardsmanNotFoundException("Guardsman with name " + name + " not found"));
-        guardsman.setPoints(guardsman.getPoints() + points);
+        guardsman.setPoints(guardsman.getPoints() + quantity);
     }
 
     @Transactional
     public void deleteGuardsman(String name) {
         guardsmanRepository.deleteByName(name);
+    }
+
+    @Transactional
+    public void changeSpecialReport(String name, int quantity) {
+        Guardsman guardsman = guardsmanRepository.findByName(name)
+                .orElseThrow(() -> new GuardsmanNotFoundException("Guardsman with name " + name + " not found"));
+        guardsman.setSpecialReport(guardsman.getSpecialReport() + quantity);
     }
 
     @Transactional
