@@ -7,7 +7,6 @@ import org.makson.guardbot.models.Rank;
 import org.makson.guardbot.repositories.RankRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

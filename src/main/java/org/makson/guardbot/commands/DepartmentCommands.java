@@ -69,7 +69,12 @@ public class DepartmentCommands extends ApplicationCommand {
         Role departmentRoleDs = guild.getRolesByName(departmentName, true).getFirst();
         guild.addRoleToMember(member, departmentRoleDs).queue();
 
-        event.getHook().sendMessage("Гвардеец добавлен в отдел").queue();
+        event.getHook().sendMessage(
+                "Гвардеец %s добавлен в отдел %s".formatted(
+                        member.getEffectiveName(),
+                        departmentName
+                )
+        ).queue();
     }
 
     @JDASlashCommand(name = "department-remove-member", description = "Удалить из отдела")
@@ -88,6 +93,11 @@ public class DepartmentCommands extends ApplicationCommand {
         Role departmentRoleDs = guild.getRolesByName(departmentName, true).getFirst();
         guild.removeRoleFromMember(member, departmentRoleDs).queue();
 
-        event.getHook().sendMessage("Гвардеец удален из отдела").queue();
+        event.getHook().sendMessage(
+                "Гвардеец %s удален из отдела %s".formatted(
+                        member.getEffectiveName(),
+                        departmentName
+                )
+        ).queue();
     }
 }

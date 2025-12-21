@@ -1,6 +1,5 @@
 package org.makson.guardbot.repositories;
 
-
 import org.makson.guardbot.models.Guardsman;
 import org.springframework.data.jpa.repository.JpaRepository;
 

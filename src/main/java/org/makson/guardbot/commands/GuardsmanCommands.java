@@ -73,7 +73,6 @@ public class GuardsmanCommands extends ApplicationCommand {
         }
 
         guild.modifyMemberRoles(member, getInitialRoles(guild), Collections.emptyList()).complete();
-
         guardsmanService.saveGuardsman(member.getEffectiveName());
 
         event.getHook().sendMessage("Гвардеец был принят!").queue();

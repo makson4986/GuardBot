@@ -9,11 +9,9 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.TopLevelSlashCommandData;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import org.makson.guardbot.dto.LogDto;
 import org.makson.guardbot.dto.PrisonerDto;
 import org.makson.guardbot.services.EmbedMessageService;
 import org.makson.guardbot.services.PrisonerService;
-import org.makson.guardbot.utils.DiscordLogger;
 
 import java.time.LocalDate;
 import java.util.List;
