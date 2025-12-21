@@ -67,6 +67,11 @@ public class DepartmentMembersService {
         departmentMemberRepository.save(member);
     }
 
+    @Transactional()
+    public void deleteMemberFromDepartment(String departmentName, String guardsmanName) {
+        departmentMemberRepository.deleteByGuardsmanByDepartment(guardsmanName, departmentName);
+    }
+
     private boolean isExists(String guardsman, String department) {
         Optional<DepartmentMember> member = departmentMemberRepository.findByGuardsmanByDepartment(guardsman, department);
         return member.isPresent();

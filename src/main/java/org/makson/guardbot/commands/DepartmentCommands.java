@@ -72,4 +72,21 @@ public class DepartmentCommands extends ApplicationCommand {
 
         event.getHook().sendMessage("Гвардеец добавлен в отдел").queue();
     }
+
+    @JDASlashCommand(name = "department", subcommand = "remove-member", description = "Удалить из отдела")
+    public void onSlashDeleteFromDepartment(
+            GuildSlashEvent event,
+            @SlashOption(name = "guardsman", description = "Кого удалить из отдела") User guardsman,
+            @SlashOption(name = "department-name", description = "Выберите отдел", autocomplete = DepartmentAutocomplete.DEPARTMENT_AUTOCOMPLETE_NAME) String departmentName
+    ) {
+        event.deferReply().queue();
+
+        departmentMembersService.deleteMemberFromDepartment(guardsman.getEffectiveName(), departmentName);
+        Guild guild = event.getGuild();
+
+        Role departmentRoleDs = guild.getRolesByName(departmentName, true).getFirst();
+        guild.removeRoleFromMember(guild.retrieveMember(guardsman).complete(), departmentRoleDs).queue();
+
+        event.getHook().sendMessage("Гвардеец удален из отдела").queue();
+    }
 }

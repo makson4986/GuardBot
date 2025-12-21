@@ -2,6 +2,7 @@ package org.makson.guardbot.repositories;
 
 import org.makson.guardbot.models.DepartmentMember;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -33,4 +34,13 @@ public interface DepartmentMemberRepository extends JpaRepository<DepartmentMemb
             dep.department.name = :department
             """)
     Optional<DepartmentMember> findByGuardsmanByDepartment(@Param("guardsman") String guardsman, @Param("department") String department);
+
+
+    @Modifying
+    @Query("""
+            delete from DepartmentMember dep
+            where dep.guardsman.name = :guardsman and
+            dep.department.name = :department
+            """)
+    void deleteByGuardsmanByDepartment(@Param("guardsman") String guardsman, @Param("department") String department);
 }
