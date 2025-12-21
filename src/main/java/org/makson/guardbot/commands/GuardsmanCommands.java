@@ -10,11 +10,12 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.*;
 import org.makson.guardbot.dto.GuardsmanInfoDto;
+import org.makson.guardbot.dto.RankDto;
 import org.makson.guardbot.exceptions.GuardsmanNotFoundException;
 import org.makson.guardbot.exceptions.RoleNotFoundException;
 import org.makson.guardbot.services.EmbedMessageService;
 import org.makson.guardbot.services.GuardsmanService;
-import org.springframework.beans.factory.annotation.Value;
+import org.makson.guardbot.services.RankService;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -25,6 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GuardsmanCommands extends ApplicationCommand {
     private final GuardsmanService guardsmanService;
+    private final RankService rankService;
     private final EmbedMessageService replyMessageService;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
@@ -103,7 +105,12 @@ public class GuardsmanCommands extends ApplicationCommand {
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого необходимо повысить") User guardsman
     ) {
+        event.deferReply().queue();
 
+        RankDto newRank = guardsmanService.changeRank(guardsman.getEffectiveName(), false);
+
+        changeRank(event, guardsman, newRank);
+        event.getHook().sendMessage("Гвардеец был повышен").queue();
     }
 
     @JDASlashCommand(name = "guardsmen", subcommand = "demote", description = "Понизить должность")
@@ -111,7 +118,12 @@ public class GuardsmanCommands extends ApplicationCommand {
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого необходимо понизить") User guardsman
     ) {
+        event.deferReply().queue();
 
+        RankDto newRank = guardsmanService.changeRank(guardsman.getEffectiveName(), true);
+
+        changeRank(event, guardsman, newRank);
+        event.getHook().sendMessage("Гвардеец был понижен").queue();
     }
 
     @JDASlashCommand(name = "guardsmen", subcommand = "points", description = "Изменить количество баллов")
@@ -146,4 +158,21 @@ public class GuardsmanCommands extends ApplicationCommand {
         return Arrays.asList(intern, guardAgent);
     }
 
+    private void clearRanksRole(Guild guild, Member member) {
+        List<Role> roles = rankService.getAllRanks().stream()
+                .map(RankDto::name)
+                .map(rank -> guild.getRolesByName(rank, true).getFirst())
+                .toList();
+
+        guild.modifyMemberRoles(member, Collections.emptyList(), roles).complete();
+    }
+
+    private void changeRank(GuildSlashEvent event, User guardsman, RankDto newRank) {
+        Guild guild = event.getGuild();
+        Member member = guild.retrieveMember(guardsman).complete();
+        Role roleRank = guild.getRolesByName(newRank.name(), true).getFirst();
+
+        clearRanksRole(guild, member);
+        guild.addRoleToMember(member, roleRank).complete();
+    }
 }

@@ -19,5 +19,4 @@ public class Rank {
     private int maxPoints;
     private int maxSpecialReports;
     private int position;
-    private long discordRoleId;
 }
