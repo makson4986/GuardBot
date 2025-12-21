@@ -5,7 +5,7 @@ VALUES ('Орган дознания'),
        ('Управляющий отдел');
 
 INSERT INTO ranks (name, max_points, max_special_reports, position)
-VALUES ('Стажер', 0, 0, 1),
+VALUES ('Стажёр', 0, 0, 1),
        ('Сержант', 120, 3, 2),
        ('Лейтенант', 185, 4, 3),
        ('Капитан', 235, 6, 4),
