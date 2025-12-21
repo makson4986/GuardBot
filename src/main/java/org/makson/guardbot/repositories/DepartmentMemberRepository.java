@@ -6,14 +6,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DepartmentMemberRepository extends JpaRepository<DepartmentMember, Integer> {
     @Query("""
-           select dep
-           from DepartmentMember dep
-           join dep.department d
-           where d.name = :name
-           """)
+            select dep
+            from DepartmentMember dep
+            join dep.department d
+            where d.name = :name
+            """)
     List<DepartmentMember> findAllByDepartmentName(@Param("name") String name);
 
 
@@ -24,4 +25,12 @@ public interface DepartmentMemberRepository extends JpaRepository<DepartmentMemb
             where  g.name =:name
             """)
     List<DepartmentMember> findAllByGuardsmanName(@Param("name") String guardsmanName);
+
+    @Query("""
+            select dep
+            from DepartmentMember  dep
+            where dep.guardsman.name = :guardsman and
+            dep.department.name = :department
+            """)
+    Optional<DepartmentMember> findByGuardsmanByDepartment(@Param("guardsman") String guardsman, @Param("department") String department);
 }

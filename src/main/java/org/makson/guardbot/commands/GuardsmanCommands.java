@@ -103,7 +103,7 @@ public class GuardsmanCommands extends ApplicationCommand {
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого необходимо повысить") User guardsman
     ) {
-        Member member = event.getGuild().retrieveMember(guardsman).complete();
+
     }
 
     @JDASlashCommand(name = "guardsmen", subcommand = "demote", description = "Понизить должность")

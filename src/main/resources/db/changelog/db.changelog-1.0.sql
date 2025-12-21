@@ -53,7 +53,8 @@ CREATE TABLE IF NOT EXISTS department_members
     department_id INT,
     role          VARCHAR(32),
     FOREIGN KEY (guardsman_id) REFERENCES guardsmen (id) ON DELETE CASCADE,
-    FOREIGN KEY (department_id) REFERENCES departments (id)
+    FOREIGN KEY (department_id) REFERENCES departments (id),
+    CONSTRAINT uq_department_members UNIQUE (guardsman_id, department_id, role)
 );
 --rollback DROP TABLE department_members;
 

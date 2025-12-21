@@ -5,6 +5,6 @@ import java.util.List;
 public record DepartmentInfoDto(
         int id,
         String name,
-        List<DepartmentMemberDto> members
+        List<DepartmentMemberResponseDto> members
 ) {
 }

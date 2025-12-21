@@ -178,8 +178,8 @@ public class EmbedMessageService {
         return now.format(formatter);
     }
 
-    private String getHeadman(List<DepartmentMemberDto> departments) {
-        Optional<DepartmentMemberDto> headman = departments.stream()
+    private String getHeadman(List<DepartmentMemberResponseDto> departments) {
+        Optional<DepartmentMemberResponseDto> headman = departments.stream()
                 .filter(member -> member.role() == DepartmentRole.HEADMAN)
                 .findFirst();
 
@@ -190,13 +190,13 @@ public class EmbedMessageService {
         return "Начальник не назначен";
     }
 
-    private String getDepartmentMembersString(List<DepartmentMemberDto> members) {
+    private String getDepartmentMembersString(List<DepartmentMemberResponseDto> members) {
         if (members.isEmpty()) {
             return "В данном отделе участники отсутсвуют";
         }
 
         return members.stream()
-                .map(DepartmentMemberDto::guardsmanName)
+                .map(DepartmentMemberResponseDto::guardsmanName)
                 .collect(Collectors.joining("\n"));
     }
 

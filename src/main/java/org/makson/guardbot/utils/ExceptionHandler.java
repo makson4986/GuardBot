@@ -56,6 +56,8 @@ public class ExceptionHandler implements GlobalExceptionHandler {
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Неверный формат даты");
             case RoleNotFoundException _ ->
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Внутренняя ошибка сервера");
+            case DepartmentMemberAlreadyExistsException _ ->
+                handleWarn((SlashCommandInteractionEvent) event, throwable,"Гвардеец уже добавлен в отдел");
             default -> {
                 handleError((SlashCommandInteractionEvent) event, throwable, "Внутренняя ошибка сервера");
             }

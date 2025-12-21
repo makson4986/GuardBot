@@ -8,9 +8,16 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.SlashOption;
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.TopLevelSlashCommandData;
 import lombok.RequiredArgsConstructor;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 import org.makson.guardbot.commands.autocompletes.DepartmentAutocomplete;
+import org.makson.guardbot.commands.autocompletes.DepartmentRoleAutocomplete;
 import org.makson.guardbot.dto.DepartmentInfoDto;
+import org.makson.guardbot.dto.DepartmentMemberCreatingDto;
+import org.makson.guardbot.models.DepartmentRole;
+import org.makson.guardbot.services.DepartmentMembersService;
 import org.makson.guardbot.services.DepartmentService;
 import org.makson.guardbot.services.EmbedMessageService;
 
@@ -18,6 +25,7 @@ import org.makson.guardbot.services.EmbedMessageService;
 @RequiredArgsConstructor
 public class DepartmentCommands extends ApplicationCommand {
     private final DepartmentService departmentService;
+    private final DepartmentMembersService departmentMembersService;
     private final EmbedMessageService embedMessageService;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
@@ -31,5 +39,37 @@ public class DepartmentCommands extends ApplicationCommand {
         MessageEmbed departmentInfoEmbed = embedMessageService.createDepartmentInfoEmbed(department);
 
         event.getHook().sendMessageEmbeds(departmentInfoEmbed).queue();
+    }
+
+    @JDASlashCommand(name = "department", subcommand = "add-member", description = "Добавить в отдел")
+    public void onSlashAddToDepartment(
+            GuildSlashEvent event,
+            @SlashOption(name = "guardsman", description = "Кого добавить в отдел") User guardsman,
+            @SlashOption(name = "department-name", description = "Выберите отдел", autocomplete = DepartmentAutocomplete.DEPARTMENT_AUTOCOMPLETE_NAME) String departmentName,
+            @SlashOption(name = "role", description = "Выберите роль", autocomplete = DepartmentRoleAutocomplete.DEPARTMENT_ROLE_AUTOCOMPLETE_NAME) String role
+    ) {
+        event.deferReply().queue();
+
+        DepartmentRole departmentRole;
+
+        if (role.equals("Глава")) {
+            departmentRole = DepartmentRole.HEADMAN;
+        } else {
+            departmentRole = DepartmentRole.EMPLOYEE;
+        }
+
+        DepartmentMemberCreatingDto memberDto = new DepartmentMemberCreatingDto(
+                guardsman.getEffectiveName(),
+                departmentName,
+                departmentRole
+        );
+
+        departmentMembersService.addMemberToDepartment(memberDto);
+        Guild guild = event.getGuild();
+
+        Role departmentRoleDs = guild.getRolesByName(departmentName, true).getFirst();
+        guild.addRoleToMember(guild.retrieveMember(guardsman).complete(), departmentRoleDs).queue();
+
+        event.getHook().sendMessage("Гвардеец добавлен в отдел").queue();
     }
 }

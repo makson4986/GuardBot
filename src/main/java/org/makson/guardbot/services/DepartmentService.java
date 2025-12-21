@@ -2,7 +2,7 @@ package org.makson.guardbot.services;
 
 import lombok.RequiredArgsConstructor;
 import org.makson.guardbot.dto.DepartmentInfoDto;
-import org.makson.guardbot.dto.DepartmentMemberDto;
+import org.makson.guardbot.dto.DepartmentMemberResponseDto;
 import org.makson.guardbot.exceptions.DepartmentNotFoundException;
 import org.makson.guardbot.models.Department;
 import org.makson.guardbot.repositories.DepartmentRepository;
@@ -19,7 +19,7 @@ public class DepartmentService {
 
     public DepartmentInfoDto getDepartmentByName(String name) {
         Optional<Department> department = departmentRepository.findDepartmentByName(name);
-        List<DepartmentMemberDto> departmentMembers = departmentMembersService.findAllByDepartmentName(name);
+        List<DepartmentMemberResponseDto> departmentMembers = departmentMembersService.findAllByDepartmentName(name);
 
         if (department.isEmpty()) {
             throw new DepartmentNotFoundException("Department with name " + name + " not found");
