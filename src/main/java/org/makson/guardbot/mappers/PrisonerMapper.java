@@ -3,6 +3,7 @@ package org.makson.guardbot.mappers;
 import org.makson.guardbot.dto.PrisonerDto;
 import org.makson.guardbot.models.Prisoner;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -12,5 +13,6 @@ public interface PrisonerMapper {
 
     List<PrisonerDto> mapListPrisoner(List<Prisoner> prisoners);
 
+    @Mapping(target = "id", ignore = true)
     Prisoner mapPrisonerDto(PrisonerDto prisonerDto);
 }
