@@ -37,7 +37,7 @@ public class DepartmentMembersService {
     public List<String> findAllByGuardsmanName(String guardsmanName) {
         List<DepartmentMember> guardsmen = departmentMemberRepository.findAllByGuardsmanName(guardsmanName);
         return guardsmen.stream()
-                .map(guardsman -> guardsman.getGuardsman().getName())
+                .map(guardsman-> guardsman.getDepartment().getName())
                 .toList();
     }
 
@@ -68,7 +68,7 @@ public class DepartmentMembersService {
     }
 
     @Transactional()
-    public void deleteMemberFromDepartment(String departmentName, String guardsmanName) {
+    public void deleteMemberFromDepartment(String guardsmanName, String departmentName) {
         departmentMemberRepository.deleteByGuardsmanByDepartment(guardsmanName, departmentName);
     }
 
