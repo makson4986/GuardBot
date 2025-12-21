@@ -127,6 +127,7 @@ public class GuardsmanService {
                 guardsman.getRank().getName(),
                 departmentService.findAllByGuardsmanName(guardsman.getName()),
                 guardsman.getLastReport(),
+                guardsman.getDescription(),
                 guardsman.getPoints(),
                 guardsman.getSpecialReport(),
                 guardsman.getRank().getMaxPoints(),

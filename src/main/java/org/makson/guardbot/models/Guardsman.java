@@ -34,6 +34,8 @@ public class Guardsman {
 
     private LocalDate lastReport;
 
+    private String description;
+
     @Builder.Default
     @OneToMany(
             mappedBy = "guardsman",

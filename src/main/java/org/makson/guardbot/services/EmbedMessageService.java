@@ -76,13 +76,7 @@ public class EmbedMessageService {
     public MessageEmbed createInfoEmbed(GuardsmanInfoDto guardsman, Color color) {
         final Set<String> ADMIN_RANKS = Set.of("Зам. главы", "Глава гвардии");
         String faceIconUrl = "https://mc-heads.net/avatar/%s/128";
-        String descriptionTemplate;
-
-        if (ADMIN_RANKS.contains(guardsman.rankName())) {
-            descriptionTemplate = getAdminInfoDescription();
-        } else {
-            descriptionTemplate = getRankedInfoDescription();
-        }
+        String description;
 
         String lastReport;
 
@@ -92,19 +86,29 @@ public class EmbedMessageService {
             lastReport = guardsman.lastReport().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         }
 
+        if (ADMIN_RANKS.contains(guardsman.rankName())) {
+            description = getAdminInfoDescription().formatted(
+                    guardsman.rankName(),
+                    getDepartment(guardsman.departmentsName()),
+                    guardsman.description()
+            );
+        } else {
+            description = getRankedInfoDescription().formatted(
+                    guardsman.rankName(),
+                    getDepartment(guardsman.departmentsName()),
+                    guardsman.points(),
+                    guardsman.requiredPoints(),
+                    guardsman.specialReport(),
+                    guardsman.requiredSpecialReport(),
+                    lastReport
+            );
+        }
+
         return new EmbedBuilder()
                 .setTitle("Информация о %s".formatted(guardsman.name()))
                 .setColor(color)
                 .setThumbnail(faceIconUrl.formatted(guardsman.name()))
-                .setDescription(descriptionTemplate.formatted(
-                        guardsman.rankName(),
-                        getDepartment(guardsman.departmentsName()),
-                        guardsman.points(),
-                        guardsman.requiredPoints(),
-                        guardsman.specialReport(),
-                        guardsman.requiredSpecialReport(),
-                        lastReport
-                ))
+                .setDescription(description)
                 .build();
     }
 
@@ -230,6 +234,7 @@ public class EmbedMessageService {
         return """
                 **Ранг:** %s
                 **Отделы:** %s
+                **Подробнее:** %s
                 """;
     }
 

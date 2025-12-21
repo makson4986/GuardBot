@@ -9,6 +9,7 @@ public record GuardsmanInfoDto(
         String rankName,
         List<String> departmentsName,
         LocalDate lastReport,
+        String description,
         int points,
         int specialReport,
         int requiredPoints,
