@@ -60,6 +60,8 @@ public class ExceptionHandler implements GlobalExceptionHandler {
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Гвардеец уже добавлен в отдел");
             case RankLimitReachedException ex ->
                     handleWarn((SlashCommandInteractionEvent) event, throwable, "Гвардеец достиг максимально/минимально допустимого ранга");
+            case IllegalArgumentException ex ->
+                handleWarn((SlashCommandInteractionEvent) event, throwable, "Неверной имя, укажите через пинг");
             default -> {
                 handleError((SlashCommandInteractionEvent) event, throwable, "Внутренняя ошибка сервера");
             }
