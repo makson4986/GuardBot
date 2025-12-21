@@ -33,7 +33,6 @@ public class ReactionPointsService {
 
     public void changePoints(List<MessageReaction> reactions, Message message, boolean isDeletion) {
         MessageEmbed embedMessage = message.getEmbeds().getFirst();
-        //TODO поставить не над embed галку
 
         if (!isReport(embedMessage) || isDuplication(reactions)) {
             return;

@@ -8,10 +8,7 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.SlashOption;
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.TopLevelSlashCommandData;
 import lombok.RequiredArgsConstructor;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import org.makson.guardbot.commands.autocompletes.DepartmentAutocomplete;
 import org.makson.guardbot.commands.autocompletes.DepartmentRoleAutocomplete;
 import org.makson.guardbot.dto.DepartmentInfoDto;
@@ -44,11 +41,13 @@ public class DepartmentCommands extends ApplicationCommand {
     @JDASlashCommand(name = "department-add-member", description = "Добавить в отдел")
     public void onSlashAddToDepartment(
             GuildSlashEvent event,
-            @SlashOption(name = "guardsman", description = "Кого добавить в отдел") User guardsman,
+            @SlashOption(name = "guardsman", description = "Кого добавить в отдел") User user,
             @SlashOption(name = "department-name", description = "Выберите отдел", autocomplete = DepartmentAutocomplete.DEPARTMENT_AUTOCOMPLETE_NAME) String departmentName,
             @SlashOption(name = "role", description = "Выберите роль", autocomplete = DepartmentRoleAutocomplete.DEPARTMENT_ROLE_AUTOCOMPLETE_NAME) String role
     ) {
         event.deferReply().queue();
+
+        Member member = event.getGuild().retrieveMember(user).complete();
 
         DepartmentRole departmentRole;
 
@@ -59,7 +58,7 @@ public class DepartmentCommands extends ApplicationCommand {
         }
 
         DepartmentMemberCreatingDto memberDto = new DepartmentMemberCreatingDto(
-                guardsman.getEffectiveName(),
+                member.getEffectiveName(),
                 departmentName,
                 departmentRole
         );
@@ -68,7 +67,7 @@ public class DepartmentCommands extends ApplicationCommand {
         Guild guild = event.getGuild();
 
         Role departmentRoleDs = guild.getRolesByName(departmentName, true).getFirst();
-        guild.addRoleToMember(guild.retrieveMember(guardsman).complete(), departmentRoleDs).queue();
+        guild.addRoleToMember(member, departmentRoleDs).queue();
 
         event.getHook().sendMessage("Гвардеец добавлен в отдел").queue();
     }
@@ -76,16 +75,18 @@ public class DepartmentCommands extends ApplicationCommand {
     @JDASlashCommand(name = "department-remove-member", description = "Удалить из отдела")
     public void onSlashDeleteFromDepartment(
             GuildSlashEvent event,
-            @SlashOption(name = "guardsman", description = "Кого удалить из отдела") User guardsman,
+            @SlashOption(name = "guardsman", description = "Кого удалить из отдела") User user,
             @SlashOption(name = "department-name", description = "Выберите отдел", autocomplete = DepartmentAutocomplete.DEPARTMENT_AUTOCOMPLETE_NAME) String departmentName
     ) {
         event.deferReply().queue();
 
-        departmentMembersService.deleteMemberFromDepartment(guardsman.getEffectiveName(), departmentName);
+        Member member = event.getGuild().retrieveMember(user).complete();
+
+        departmentMembersService.deleteMemberFromDepartment(member.getEffectiveName(), departmentName);
         Guild guild = event.getGuild();
 
         Role departmentRoleDs = guild.getRolesByName(departmentName, true).getFirst();
-        guild.removeRoleFromMember(guild.retrieveMember(guardsman).complete(), departmentRoleDs).queue();
+        guild.removeRoleFromMember(member, departmentRoleDs).queue();
 
         event.getHook().sendMessage("Гвардеец удален из отдела").queue();
     }

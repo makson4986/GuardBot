@@ -30,7 +30,7 @@ public class GuardsmanCommands extends ApplicationCommand {
     private final EmbedMessageService replyMessageService;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
-    @JDASlashCommand(name = "guardsmen-list",  description = "Список всех гвардейцев")
+    @JDASlashCommand(name = "guardsmen-list", description = "Список всех гвардейцев")
     public void onSlashListGuardsmen(GuildSlashEvent event) {
         event.deferReply(false).queue();
         var allGuardsman = guardsmanService.getAllGuardsman();
@@ -61,12 +61,12 @@ public class GuardsmanCommands extends ApplicationCommand {
     @JDASlashCommand(name = "guardsmen-hire", description = "Нанять")
     public void onSlashHireGuardsman(
             GuildSlashEvent event,
-            @SlashOption(name = "guardsman", description = "Кого необходимо нанять") User guardsman
+            @SlashOption(name = "guardsman", description = "Кого необходимо нанять") User user
     ) {
         event.deferReply().queue();
 
         Guild guild = event.getGuild();
-        Member member = guild.retrieveMember(guardsman).complete();
+        Member member = guild.retrieveMember(user).complete();
 
         if (member == null) {
             throw new GuardsmanNotFoundException("Guardsman not found");
@@ -74,7 +74,7 @@ public class GuardsmanCommands extends ApplicationCommand {
 
         guild.modifyMemberRoles(member, getInitialRoles(guild), Collections.emptyList()).complete();
 
-        guardsmanService.saveGuardsman(guardsman.getEffectiveName());
+        guardsmanService.saveGuardsman(member.getEffectiveName());
 
         event.getHook().sendMessage("Гвардеец был принят!").queue();
     }
@@ -82,58 +82,64 @@ public class GuardsmanCommands extends ApplicationCommand {
     @JDASlashCommand(name = "guardsmen-dismiss", description = "Уволить")
     public void onSlashDismissGuardsman(
             GuildSlashEvent event,
-            @SlashOption(name = "guardsman", description = "Кого необходимо уволить") User guardsman
+            @SlashOption(name = "guardsman", description = "Кого необходимо уволить") User user
     ) {
         event.deferReply().queue();
 
         Guild guild = event.getGuild();
-        Member member = guild.retrieveMember(guardsman).complete();
+        Member member = guild.retrieveMember(user).complete();
 
         if (member == null) {
             throw new GuardsmanNotFoundException("Guardsman not found");
         }
 
         guild.modifyMemberRoles(member, Collections.emptyList(), member.getRoles()).queue();
-        guardsmanService.deleteGuardsman(guardsman.getEffectiveName());
+        guardsmanService.deleteGuardsman(member.getEffectiveName());
 
-        event.getHook().sendMessage("Гвардеец " + guardsman.getEffectiveName() + " уволен!").queue();
+        event.getHook().sendMessage("Гвардеец " + user.getEffectiveName() + " уволен!").queue();
     }
 
     @JDASlashCommand(name = "guardsmen-promote", description = "Повысить должность")
     public void onSlashPromoteGuardsman(
             GuildSlashEvent event,
-            @SlashOption(name = "guardsman", description = "Кого необходимо повысить") User guardsman
+            @SlashOption(name = "guardsman", description = "Кого необходимо повысить") User user
     ) {
         event.deferReply().queue();
 
-        RankDto newRank = guardsmanService.changeRank(guardsman.getEffectiveName(), false);
+        Member member = event.getGuild().retrieveMember(user).complete();
 
-        changeRank(event, guardsman, newRank);
+        RankDto newRank = guardsmanService.changeRank(member.getEffectiveName(), false);
+
+        changeRank(event, member, newRank);
         event.getHook().sendMessage("Гвардеец был повышен").queue();
     }
 
     @JDASlashCommand(name = "guardsmen-demote", description = "Понизить должность")
     public void onSlashDemoteGuardsman(
             GuildSlashEvent event,
-            @SlashOption(name = "guardsman", description = "Кого необходимо понизить") User guardsman
+            @SlashOption(name = "guardsman", description = "Кого необходимо понизить") User user
     ) {
         event.deferReply().queue();
 
-        RankDto newRank = guardsmanService.changeRank(guardsman.getEffectiveName(), true);
+        Member member = event.getGuild().retrieveMember(user).complete();
 
-        changeRank(event, guardsman, newRank);
+        RankDto newRank = guardsmanService.changeRank(member.getEffectiveName(), true);
+
+        changeRank(event, member, newRank);
         event.getHook().sendMessage("Гвардеец был понижен").queue();
     }
 
     @JDASlashCommand(name = "guardsmen-points", description = "Изменить количество баллов")
     public void onSlashChangePointsGuardsman(
             GuildSlashEvent event,
-            @SlashOption(name = "guardsman", description = "У кого необходимо изменить") User guardsman,
+            @SlashOption(name = "guardsman", description = "У кого необходимо изменить") User user,
             @SlashOption(name = "quantity", description = "На сколько изменить (пример 10, -15)") Integer quantity
     ) {
         event.deferReply().queue();
 
-        guardsmanService.changePoints(guardsman.getEffectiveName(), quantity);
+        Member member = event.getGuild().retrieveMember(user).complete();
+
+        guardsmanService.changePoints(member.getEffectiveName(), quantity);
 
         event.getHook().sendMessage("Баллы были изменены").queue();
     }
@@ -166,7 +172,7 @@ public class GuardsmanCommands extends ApplicationCommand {
         guild.modifyMemberRoles(member, Collections.emptyList(), roles).complete();
     }
 
-    private void changeRank(GuildSlashEvent event, User guardsman, RankDto newRank) {
+    private void changeRank(GuildSlashEvent event, Member guardsman, RankDto newRank) {
         Guild guild = event.getGuild();
         Member member = guild.retrieveMember(guardsman).complete();
         Role roleRank = guild.getRolesByName(newRank.name(), true).getFirst();
