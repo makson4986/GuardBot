@@ -1,7 +1,7 @@
 INSERT INTO departments (name)
-VALUES ('Отряд "Санитаров"'),
-       ('Отряд "Эпсилон"'),
-       ('Отряд "Дельта"'),
+VALUES ('Орган дознания'),
+       ('Тяжелое подразделение'),
+       ('Сан. отдел'),
        ('Управляющий отдел');
 
 INSERT INTO ranks (name, max_points, max_special_reports, position)
@@ -16,7 +16,7 @@ VALUES ('Стажер', 0, 0, 1),
 
 INSERT INTO guardsmen(name, rank_id, points, special_report, last_report)
 VALUES ('Faust_Bismarkvil', 8, -1, -1, null),
-       ('Mayzito', 7, -1, -1, null)
+       ('Mayzito', 7, -1, -1, null);
 INSERT INTO department_members(guardsman_id, department_id, role)
 VALUES (1, 4, 'HEADMAN'),
        (2, 4, 'HEADMAN')
