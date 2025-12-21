@@ -77,7 +77,6 @@ public class GuardsmanCommands extends ApplicationCommand {
         guardsmanService.saveGuardsman(guardsman.getEffectiveName());
 
         event.getHook().sendMessage("Гвардеец был принят!").queue();
-
     }
 
     @JDASlashCommand(name = "guardsmen-dismiss", description = "Уволить")
@@ -148,7 +147,7 @@ public class GuardsmanCommands extends ApplicationCommand {
     }
 
     private List<Role> getInitialRoles(Guild guild) {
-        Role intern = guild.getRolesByName("Стажер", true).getFirst();
+        Role intern = guild.getRolesByName("Стажёр", true).getFirst();
         Role guardAgent = guild.getRolesByName("Агент Гвардии", true).getFirst();
 
         if (intern == null || guardAgent == null) {
