@@ -26,22 +26,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: postgres
     ports:
       - "8080:8080"
-      -
-
-  backup:
-    image: postgres:latedst
-    profiles: [ "backup" ]
-    depends_on:
-      - postgres
-    volumes:
-      - ./backups:/backups
-    command: >
-      sh -c "
-        apk add --no-cache cron &&
-        echo '0 0 * * * PGPASSWORD=postgres pg_dump -h postgres -U postgres -Fc guard > /backups/guard_\$(date +%%Y%%m%%d).dump' > /etc/crontabs/backup &&
-        crontab /etc/crontabs/backup &&
-        crond -f -l 2
-      "
 
 volumes:
   pgdata:

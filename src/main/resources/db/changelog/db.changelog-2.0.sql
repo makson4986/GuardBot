@@ -20,15 +20,14 @@ VALUES ('Faust_Bismarkvil', 8, 0, 0, null),
        ('_A1d', 2, 0, 0, null),
        ('KoftachkaWTF', 1, 0, 0, null),
        ('Olenik636', 1, 0, 0, null),
-       ('MaksonLegend', 2, 17, 0, '2025-12-13'),
-       ('Chertila13', 1, 0, 0, '2025-12-13'),
-       ('Ay_ro_', 3, 30, 0, '2025-12-11'),
-       ('Nick_Torch14', 6, 0, 0, '2025-12-11'),
-       ('Su4cka', 2, 0, 0, null),
-       ('Charlotan', 2, 7, 0, '2025-12-9'),
-       ('Aleksandlolkek', 1, 0, 0, '2025-12-8'),
+       ('MaksonLegend', 2, 17, 0, null),
+       ('Chertila13', 1, 0, 0, null),
+       ('Ay_ro_', 3, 30, 0, null),
+       ('Nick_Torch14', 6, 300, 8, null),
+       ('Charlotan', 2, 7, 0, null),
+       ('Aleksandlolkek', 1, 0, 0, null),
        ('MaksMaruS_', 2, 0, 0, null);
 
 INSERT INTO department_members(guardsman_id, department_id, role)
 VALUES (1, 4, 'HEADMAN'),
-       (2, 4, 'HEADMAN')
+       (2, 4, 'HEADMAN');
