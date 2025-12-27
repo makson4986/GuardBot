@@ -155,8 +155,8 @@ public class GuardsmanCommands extends ApplicationCommand {
         event.deferReply().queue();
         Member member = defineMember(event, user);
 
-        guardsmanService.changeName(member.getEffectiveName(), newName);
         member.modifyNickname(newName).complete();
+        guardsmanService.changeName(member.getEffectiveName(), newName);
 
         event.getHook().sendMessage("Имя успешно изменено!").queue();
 
