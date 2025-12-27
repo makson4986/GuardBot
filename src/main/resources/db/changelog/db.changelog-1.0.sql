@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS ranks
     name                VARCHAR(32) UNIQUE NOT NULL,
     max_points          INT                NOT NULL,
     max_special_reports INT                NOT NULL,
-    position            INT                NOT NULL
+    position            INT                NOT NULL,
+    is_achieved          BOOLEAN
 );
 --rollback DROP TABLE ranks;
 
@@ -20,7 +21,7 @@ CREATE TABLE IF NOT EXISTS guardsmen
     points         INT DEFAULT 0,
     special_report INT DEFAULT 0,
     last_report    DATE,
-    description TEXT,
+    description    TEXT,
     FOREIGN KEY (rank_id) REFERENCES ranks (id)
 );
 --rollback DROP TABLE guardsman;

@@ -19,4 +19,5 @@ public class Rank {
     private int maxPoints;
     private int maxSpecialReports;
     private int position;
+    private boolean isAchieved;
 }

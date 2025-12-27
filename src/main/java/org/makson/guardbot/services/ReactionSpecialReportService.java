@@ -16,7 +16,7 @@ public class ReactionSpecialReportService {
 
     public void changeSpecialReport(Message message, boolean isSubtraction) {
         int DEFAULT_SPECIAL_REPORT_INCREMENT = 1;
-        int quantity = 0;
+        int quantity;
 
         if (isSubtraction) {
             quantity = DEFAULT_SPECIAL_REPORT_INCREMENT * -1;

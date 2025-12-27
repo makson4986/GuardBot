@@ -5,6 +5,7 @@ public record RankDto(
         String name,
         int maxPoints,
         int maxSpecialReports,
-        int position
+        int position,
+        boolean isAchieved
 ) {
 }

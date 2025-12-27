@@ -4,15 +4,15 @@ VALUES ('Орган дознания'),
        ('Сан. отдел'),
        ('Управляющий отдел');
 
-INSERT INTO ranks (name, max_points, max_special_reports, position)
-VALUES ('Стажёр', 0, 0, 1),
-       ('Сержант', 120, 3, 2),
-       ('Лейтенант', 185, 4, 3),
-       ('Капитан', 235, 6, 4),
-       ('Майор', 300, 8, 5),
-       ('Полковник', 300, 8, 6),
-       ('Зам. главы', -1, -1, 7),
-       ('Глава гвардии', -1, -1, 8);
+INSERT INTO ranks (name, max_points, max_special_reports, position, is_achieved)
+VALUES ('Стажёр', 0, 0, 1, true),
+       ('Сержант', 120, 3, 2, true),
+       ('Лейтенант', 185, 4, 3, true),
+       ('Капитан', 235, 6, 4, true),
+       ('Майор', 300, 8, 5, true),
+       ('Полковник', 300, 8, 6, true),
+       ('Зам. главы', -1, -1, 7, false),
+       ('Глава гвардии', -1, -1, 8, false);
 
 INSERT INTO guardsmen(name, rank_id, points, special_report, last_report, description)
 VALUES ('Faust_Bismarkvil', 8, 0, 0, null, null),

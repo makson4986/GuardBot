@@ -23,6 +23,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GuardsmanService {
     private final DepartmentService departmentService;
+    private final RankService rankService;
     private final GuardsmanRepository guardsmanRepository;
     private final RankRepository rankRepository;
     private final RankMapper mapper;
@@ -58,7 +59,11 @@ public class GuardsmanService {
     public void changePoints(String name, int quantity) {
         Guardsman guardsman = guardsmanRepository.findByName(name)
                 .orElseThrow(() -> new GuardsmanNotFoundException("Guardsman with name " + name + " not found"));
-        guardsman.setPoints(guardsman.getPoints() + quantity);
+
+        int points = guardsman.getPoints() + quantity;
+        int maxPoints = rankService.getMaxRank().maxPoints();
+
+        guardsman.setPoints(clamp(points, maxPoints));
     }
 
     @Transactional
@@ -70,7 +75,11 @@ public class GuardsmanService {
     public void changeSpecialReport(String name, int quantity) {
         Guardsman guardsman = guardsmanRepository.findByName(name)
                 .orElseThrow(() -> new GuardsmanNotFoundException("Guardsman with name " + name + " not found"));
-        guardsman.setSpecialReport(guardsman.getSpecialReport() + quantity);
+
+        int specialReport = guardsman.getSpecialReport() + quantity;
+        int maxSpecialReports = rankService.getMaxRank().maxSpecialReports();
+
+        guardsman.setSpecialReport(clamp(specialReport, maxSpecialReports));
     }
 
     @Transactional
@@ -160,5 +169,17 @@ public class GuardsmanService {
         if (currentPosition < MIN_POSITION_RANK || currentPosition > MAX_POSITION_RANK) {
             throw new RankLimitReachedException("The current rank has reached the limit");
         }
+    }
+
+    private int clamp(int value, int max) {
+        int min = 0;
+
+        if (value < min) {
+            return min;
+        } else if (value > max) {
+            return max;
+        }
+
+        return value;
     }
 }
