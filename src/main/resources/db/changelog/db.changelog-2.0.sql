@@ -15,7 +15,7 @@ VALUES ('Стажёр', 0, 0, 1),
        ('Глава гвардии', -1, -1, 8);
 
 INSERT INTO guardsmen(name, rank_id, points, special_report, last_report, description)
-VALUES ('Faust_Bismarkvil', 8, 0, 0, null, null),
+VALUES ('Faust_Bismarkvil', 8, 0, 0, null, 'Обладатель карты острова сокровищ, много пьет и всегда простужен. Характер скверный. Не женат'),
        ('Mayzito', 7, 0, 0, null, 'Вес 170кг'),
        ('_A1d', 2, 0, 0, null, null),
        ('KoftachkaWTF', 1, 0, 0, null, null),
