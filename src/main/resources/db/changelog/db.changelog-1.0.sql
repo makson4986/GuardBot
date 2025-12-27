@@ -7,8 +7,7 @@ CREATE TABLE IF NOT EXISTS ranks
     name                VARCHAR(32) UNIQUE NOT NULL,
     max_points          INT                NOT NULL,
     max_special_reports INT                NOT NULL,
-    position            INT                NOT NULL,
-    is_achieved          BOOLEAN
+    position            INT                NOT NULL
 );
 --rollback DROP TABLE ranks;
 

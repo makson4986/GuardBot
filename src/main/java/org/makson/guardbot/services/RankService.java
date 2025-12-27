@@ -5,7 +5,6 @@ import org.makson.guardbot.dto.RankDto;
 import org.makson.guardbot.mappers.RankMapper;
 import org.makson.guardbot.models.Rank;
 import org.makson.guardbot.repositories.RankRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,10 +18,5 @@ public class RankService {
     public List<RankDto> getAllRanks() {
         List<Rank> ranks = rankRepository.findAll();
         return mapper.mapRankList(ranks);
-    }
-
-    public RankDto getMaxRank() {
-        Rank rank = rankRepository.getMaxRank();
-        return mapper.mapRank(rank);
     }
 }

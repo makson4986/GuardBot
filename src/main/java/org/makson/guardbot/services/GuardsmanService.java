@@ -23,7 +23,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GuardsmanService {
     private final DepartmentService departmentService;
-    private final RankService rankService;
     private final GuardsmanRepository guardsmanRepository;
     private final RankRepository rankRepository;
     private final RankMapper mapper;
@@ -51,7 +50,7 @@ public class GuardsmanService {
     public void changePoints(String name, int quantity) {
         Guardsman guardsman = isExists(name);
         int points = guardsman.getPoints() + quantity;
-        int maxPoints = rankService.getMaxRank().maxPoints();
+        int maxPoints = guardsman.getRank().getMaxPoints();
 
         guardsman.setPoints(clamp(points, maxPoints));
     }
@@ -65,7 +64,7 @@ public class GuardsmanService {
     public void changeSpecialReport(String name, int quantity) {
         Guardsman guardsman = isExists(name);
         int specialReport = guardsman.getSpecialReport() + quantity;
-        int maxSpecialReports = rankService.getMaxRank().maxSpecialReports();
+        int maxSpecialReports = guardsman.getRank().getMaxSpecialReports();
 
         guardsman.setSpecialReport(clamp(specialReport, maxSpecialReports));
     }
