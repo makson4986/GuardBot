@@ -30,14 +30,7 @@ public class GuardsmanService {
 
     @Transactional(readOnly = true)
     public GuardsmanInfoDto getGuardsman(String name) {
-        Optional<Guardsman> guardsman = guardsmanRepository.findByName(name);
-
-        if (guardsman.isEmpty()) {
-            throw new GuardsmanNotFoundException("Guardsman with name " + name + " not found");
-        }
-
-        Guardsman guard = guardsman.get();
-        return createGuardsmanInfo(guard);
+        return createGuardsmanInfo(isExists(name));
     }
 
     @Transactional(readOnly = true)
@@ -50,16 +43,13 @@ public class GuardsmanService {
 
     @Transactional
     public void updateLastReportDate(String name, LocalDate date) {
-        Guardsman guardsman = guardsmanRepository.findByName(name)
-                .orElseThrow(() -> new GuardsmanNotFoundException("Guardsman with name " + name + " not found"));
+        Guardsman guardsman = isExists(name);
         guardsman.setLastReport(date);
     }
 
     @Transactional
     public void changePoints(String name, int quantity) {
-        Guardsman guardsman = guardsmanRepository.findByName(name)
-                .orElseThrow(() -> new GuardsmanNotFoundException("Guardsman with name " + name + " not found"));
-
+        Guardsman guardsman = isExists(name);
         int points = guardsman.getPoints() + quantity;
         int maxPoints = rankService.getMaxRank().maxPoints();
 
@@ -73,9 +63,7 @@ public class GuardsmanService {
 
     @Transactional
     public void changeSpecialReport(String name, int quantity) {
-        Guardsman guardsman = guardsmanRepository.findByName(name)
-                .orElseThrow(() -> new GuardsmanNotFoundException("Guardsman with name " + name + " not found"));
-
+        Guardsman guardsman = isExists(name);
         int specialReport = guardsman.getSpecialReport() + quantity;
         int maxSpecialReports = rankService.getMaxRank().maxSpecialReports();
 
@@ -85,6 +73,8 @@ public class GuardsmanService {
     @Transactional
     public void saveGuardsman(String name) {
         int defaultRankId = 1;
+
+        checkConflict(name);
 
         Rank rank = rankRepository.getReferenceById(defaultRankId);
 
@@ -98,40 +88,24 @@ public class GuardsmanService {
 
     @Transactional
     public RankDto changeRank(String name, boolean isDemotion) {
-        Optional<Guardsman> guardsman = guardsmanRepository.findByName(name);
+        Guardsman guardsman = isExists(name);
 
-        if (guardsman.isEmpty()) {
-            throw new GuardsmanNotFoundException("Guardsman with name " + name + " not found");
-        }
-
-        Guardsman guard = guardsman.get();
-
-        int newRankPosition = defineNewRankPosition(isDemotion, guard);
+        int newRankPosition = defineNewRankPosition(isDemotion, guardsman);
 
         checkLimitRank(newRankPosition);
 
         Rank rank = rankRepository.getRankByPosition(newRankPosition);
 
-        guard.setRank(rank);
+        guardsman.setRank(rank);
 
         return mapper.mapRank(rank);
     }
 
     @Transactional
     public void changeName(String oldName, String newName) {
-        Optional<Guardsman> guardsman = guardsmanRepository.findByName(oldName);
-        Optional<Guardsman> existsGuardsman = guardsmanRepository.findByName(newName);
-
-        if (guardsman.isEmpty()) {
-            throw new GuardsmanNotFoundException("Guardsman with name " + oldName + " not found");
-        }
-
-        if (existsGuardsman.isPresent()) {
-            throw new GuardsmanAlreadyExistsException("Guardsman with name " + newName + " not found");
-        }
-
-        Guardsman guard = guardsman.get();
-        guard.setName(newName);
+        Guardsman guardsman = isExists(oldName);
+        checkConflict(newName);
+        guardsman.setName(newName);
     }
 
     private int defineNewRankPosition(boolean isDemotion, Guardsman guardsman) {
@@ -181,5 +155,23 @@ public class GuardsmanService {
         }
 
         return value;
+    }
+
+    private Guardsman isExists(String name) {
+        Optional<Guardsman> guardsman = guardsmanRepository.findByName(name);
+
+        if (guardsman.isEmpty()) {
+            throw new GuardsmanNotFoundException("Guardsman with name " + name + " not found");
+        }
+
+        return guardsman.get();
+    }
+
+    private void checkConflict(String name) {
+        Optional<Guardsman> guardsman = guardsmanRepository.findByName(name);
+
+        if (guardsman.isPresent()) {
+            throw new GuardsmanAlreadyExistsException("Guardsman with name " + name + " already exists!");
+        }
     }
 }
