@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS guardsmen
     points         INT DEFAULT 0,
     special_report INT DEFAULT 0,
     last_report    DATE,
+    description TEXT,
     FOREIGN KEY (rank_id) REFERENCES ranks (id)
 );
 --rollback DROP TABLE guardsman;

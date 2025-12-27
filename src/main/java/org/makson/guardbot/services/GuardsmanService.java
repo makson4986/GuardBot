@@ -4,6 +4,7 @@ package org.makson.guardbot.services;
 import lombok.RequiredArgsConstructor;
 import org.makson.guardbot.dto.GuardsmanInfoDto;
 import org.makson.guardbot.dto.RankDto;
+import org.makson.guardbot.exceptions.GuardsmanAlreadyExistsException;
 import org.makson.guardbot.exceptions.GuardsmanNotFoundException;
 import org.makson.guardbot.exceptions.RankLimitReachedException;
 import org.makson.guardbot.mappers.RankMapper;
@@ -105,6 +106,23 @@ public class GuardsmanService {
         guard.setRank(rank);
 
         return mapper.mapRank(rank);
+    }
+
+    @Transactional
+    public void changeName(String oldName, String newName) {
+        Optional<Guardsman> guardsman = guardsmanRepository.findByName(oldName);
+        Optional<Guardsman> existsGuardsman = guardsmanRepository.findByName(newName);
+
+        if (guardsman.isEmpty()) {
+            throw new GuardsmanNotFoundException("Guardsman with name " + oldName + " not found");
+        }
+
+        if (existsGuardsman.isPresent()) {
+            throw new GuardsmanAlreadyExistsException("Guardsman with name " + newName + " not found");
+        }
+
+        Guardsman guard = guardsman.get();
+        guard.setName(newName);
     }
 
     private int defineNewRankPosition(boolean isDemotion, Guardsman guardsman) {

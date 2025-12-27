@@ -10,12 +10,14 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.*;
 import org.makson.guardbot.dto.GuardsmanInfoDto;
+import org.makson.guardbot.dto.LogDto;
 import org.makson.guardbot.dto.RankDto;
 import org.makson.guardbot.exceptions.GuardsmanNotFoundException;
 import org.makson.guardbot.exceptions.RoleNotFoundException;
 import org.makson.guardbot.services.EmbedMessageService;
 import org.makson.guardbot.services.GuardsmanService;
 import org.makson.guardbot.services.RankService;
+import org.makson.guardbot.utils.DiscordLogger;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -28,6 +30,7 @@ public class GuardsmanCommands extends ApplicationCommand {
     private final GuardsmanService guardsmanService;
     private final RankService rankService;
     private final EmbedMessageService replyMessageService;
+    private final DiscordLogger logger;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
     @JDASlashCommand(name = "guardsmen-list", description = "Список всех гвардейцев")
@@ -141,6 +144,27 @@ public class GuardsmanCommands extends ApplicationCommand {
         guardsmanService.changePoints(member.getEffectiveName(), quantity);
 
         event.getHook().sendMessage("Баллы были изменены").queue();
+    }
+
+    @JDASlashCommand(name = "guardsmen-change-name", description = "Изменить имя")
+    public void onSlashChangeName(
+            GuildSlashEvent event,
+            @SlashOption(name = "new-name", description = "Новый ник, как в майнкрафте") String newName,
+            @Nullable @SlashOption(name = "guardsman", description = "Кому поменять ник") User user
+    ) {
+        event.deferReply().queue();
+        Member member = defineMember(event, user);
+
+        guardsmanService.changeName(member.getEffectiveName(), newName);
+        member.modifyNickname(newName).complete();
+
+        event.getHook().sendMessage("Имя успешно изменено!").queue();
+
+        logger.info(new LogDto(
+                member.getUser(),
+                event.getCommandString(),
+                "The guardsman changed his name from " + member.getEffectiveName() + " to " + newName
+        ));
     }
 
     private Member defineMember(GuildSlashEvent event, User user) {
