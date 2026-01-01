@@ -34,11 +34,11 @@ public class ReactionPointsService {
     public void changePoints(List<MessageReaction> reactions, Message message, boolean isDeletion) {
         MessageEmbed embedMessage = message.getEmbeds().getFirst();
 
-        if (!isReport(embedMessage) || isDuplication(reactions)) {
+        if (!isReport(embedMessage)) {
             return;
         }
 
-        int points = calculatePoints(reactions, isDeletion);
+        int points = calculatePoints(filterReactions(reactions), isDeletion);
 
         List<String> usernames = reportParser.parseUsernamesFromReport(embedMessage.getDescription()).stream()
                 .map(reportParser::parseIdToUsernames)
@@ -51,15 +51,8 @@ public class ReactionPointsService {
 
     private int calculatePoints(List<MessageReaction> reactions, boolean isDeletion) {
         int points = 0;
-        int quantityPointsReaction;
 
-        if (isDeletion) {
-            quantityPointsReaction = reactions.size();
-        } else {
-            quantityPointsReaction = reactions.size() - 1;
-        }
-
-        for (int i = 0; i < quantityPointsReaction; i++) {
+        for (int i = 0; i < reactions.size(); i++) {
             String emoji = reactions.get(i).getEmoji().getName();
 
             if (!POINTS.containsKey(emoji)) {
@@ -67,7 +60,7 @@ public class ReactionPointsService {
             }
 
             int digit = POINTS.get(emoji);
-            int power = quantityPointsReaction - 1 - i;
+            int power = reactions.size() - 1 - i;
 
             points += digit * (int) Math.pow(10, power);
         }
@@ -82,14 +75,9 @@ public class ReactionPointsService {
         return message.getTitle() != null && message.getTitle().startsWith("Отчет");
     }
 
-    private boolean isDuplication(List<MessageReaction> reactions) {
-        final String confirmationReaction = "✅";
-
-        Optional<MessageReaction> react = reactions.stream()
-                .filter(reaction -> reaction.getEmoji().getName().equals(confirmationReaction))
-                .findFirst();
-
-        return react.filter(messageReaction -> messageReaction.getCount() > 1).isPresent();
-
+    private List<MessageReaction> filterReactions(List<MessageReaction> reactions) {
+       return reactions.stream()
+                .filter(reaction -> POINTS.containsKey(reaction.getEmoji().getName()))
+                .toList();
     }
 }
