@@ -1,6 +1,6 @@
 package org.makson.guardbot.mappers;
 
-import org.makson.guardbot.dto.PrisonerDto;
+import org.makson.guardbot.dto.prison.PrisonerDto;
 import org.makson.guardbot.models.Prisoner;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

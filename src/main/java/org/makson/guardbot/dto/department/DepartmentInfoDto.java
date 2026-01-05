@@ -1,4 +1,4 @@
-package org.makson.guardbot.dto;
+package org.makson.guardbot.dto.department;
 
 import java.util.List;
 

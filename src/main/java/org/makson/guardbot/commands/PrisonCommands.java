@@ -9,7 +9,7 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.TopLevelSlashCommandData;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import org.makson.guardbot.dto.PrisonerDto;
+import org.makson.guardbot.dto.prison.PrisonerDto;
 import org.makson.guardbot.services.EmbedMessageService;
 import org.makson.guardbot.services.PrisonerService;
 

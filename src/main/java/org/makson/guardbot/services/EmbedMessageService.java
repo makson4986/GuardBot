@@ -3,7 +3,13 @@ package org.makson.guardbot.services;
 import io.github.freya022.botcommands.api.core.service.annotations.BService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import org.makson.guardbot.dto.*;
+import org.makson.guardbot.dto.department.DepartmentInfoDto;
+import org.makson.guardbot.dto.department.DepartmentMemberResponseDto;
+import org.makson.guardbot.dto.guardsman.GuardsmanInfoDto;
+import org.makson.guardbot.dto.log.LogDto;
+import org.makson.guardbot.dto.prison.PrisonerDto;
+import org.makson.guardbot.dto.report.ReportDto;
+import org.makson.guardbot.dto.report.SpecialReportDto;
 import org.makson.guardbot.models.DepartmentRole;
 
 import java.awt.*;
@@ -212,7 +218,7 @@ public class EmbedMessageService {
 
     private String getDepartmentMembersString(List<DepartmentMemberResponseDto> members) {
         if (members.isEmpty()) {
-            return "В данном отделе участники отсутсвуют";
+            return "В данном отделе участники отсутствуют";
         }
 
         return members.stream()

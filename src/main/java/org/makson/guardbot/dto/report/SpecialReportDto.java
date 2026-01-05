@@ -1,4 +1,4 @@
-package org.makson.guardbot.dto;
+package org.makson.guardbot.dto.report;
 
 import net.dv8tion.jda.api.entities.Message;
 

@@ -1,6 +1,6 @@
 package org.makson.guardbot.mappers;
 
-import org.makson.guardbot.dto.RankDto;
+import org.makson.guardbot.dto.rank.RankDto;
 import org.makson.guardbot.models.Rank;
 import org.mapstruct.Mapper;
 

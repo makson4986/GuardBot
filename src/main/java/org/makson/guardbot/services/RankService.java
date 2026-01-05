@@ -1,7 +1,7 @@
 package org.makson.guardbot.services;
 
 import lombok.RequiredArgsConstructor;
-import org.makson.guardbot.dto.RankDto;
+import org.makson.guardbot.dto.rank.RankDto;
 import org.makson.guardbot.mappers.RankMapper;
 import org.makson.guardbot.models.Rank;
 import org.makson.guardbot.repositories.RankRepository;

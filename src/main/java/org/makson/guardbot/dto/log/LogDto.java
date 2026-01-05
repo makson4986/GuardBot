@@ -1,4 +1,4 @@
-package org.makson.guardbot.dto;
+package org.makson.guardbot.dto.log;
 
 import net.dv8tion.jda.api.entities.User;
 

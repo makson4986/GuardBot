@@ -1,8 +1,8 @@
 package org.makson.guardbot.services;
 
 import lombok.RequiredArgsConstructor;
-import org.makson.guardbot.dto.DepartmentMemberCreatingDto;
-import org.makson.guardbot.dto.DepartmentMemberResponseDto;
+import org.makson.guardbot.dto.department.DepartmentMemberCreatingDto;
+import org.makson.guardbot.dto.department.DepartmentMemberResponseDto;
 import org.makson.guardbot.exceptions.DepartmentMemberAlreadyExistsException;
 import org.makson.guardbot.exceptions.DepartmentNotFoundException;
 import org.makson.guardbot.exceptions.GuardsmanNotFoundException;

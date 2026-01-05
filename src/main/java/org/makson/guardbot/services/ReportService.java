@@ -1,8 +1,8 @@
 package org.makson.guardbot.services;
 
 import lombok.RequiredArgsConstructor;
-import org.makson.guardbot.dto.GuardsmanInfoDto;
-import org.makson.guardbot.dto.SpecialReportDto;
+import org.makson.guardbot.dto.guardsman.GuardsmanInfoDto;
+import org.makson.guardbot.dto.report.SpecialReportDto;
 import org.makson.guardbot.utils.ReportParser;
 import org.springframework.stereotype.Service;
 

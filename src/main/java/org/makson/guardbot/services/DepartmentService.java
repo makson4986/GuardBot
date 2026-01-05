@@ -1,8 +1,8 @@
 package org.makson.guardbot.services;
 
 import lombok.RequiredArgsConstructor;
-import org.makson.guardbot.dto.DepartmentInfoDto;
-import org.makson.guardbot.dto.DepartmentMemberResponseDto;
+import org.makson.guardbot.dto.department.DepartmentInfoDto;
+import org.makson.guardbot.dto.department.DepartmentMemberResponseDto;
 import org.makson.guardbot.exceptions.DepartmentNotFoundException;
 import org.makson.guardbot.models.Department;
 import org.makson.guardbot.repositories.DepartmentRepository;

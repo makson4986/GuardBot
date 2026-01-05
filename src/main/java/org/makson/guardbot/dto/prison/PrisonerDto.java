@@ -1,4 +1,4 @@
-package org.makson.guardbot.dto;
+package org.makson.guardbot.dto.prison;
 
 import java.time.LocalDate;
 

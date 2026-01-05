@@ -9,9 +9,9 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.TopLevelSlashCommandData;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.*;
-import org.makson.guardbot.dto.GuardsmanInfoDto;
-import org.makson.guardbot.dto.LogDto;
-import org.makson.guardbot.dto.RankDto;
+import org.makson.guardbot.dto.guardsman.GuardsmanInfoDto;
+import org.makson.guardbot.dto.log.LogDto;
+import org.makson.guardbot.dto.rank.RankDto;
 import org.makson.guardbot.exceptions.GuardsmanNotFoundException;
 import org.makson.guardbot.exceptions.RoleNotFoundException;
 import org.makson.guardbot.services.EmbedMessageService;

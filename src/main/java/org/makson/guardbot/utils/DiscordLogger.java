@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
-import org.makson.guardbot.dto.LogDto;
+import org.makson.guardbot.dto.log.LogDto;
 import org.makson.guardbot.exceptions.ChannelNotFoundException;
 import org.makson.guardbot.services.EmbedMessageService;
 import org.springframework.beans.factory.annotation.Value;

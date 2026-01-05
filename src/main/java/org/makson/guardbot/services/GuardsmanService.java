@@ -2,8 +2,8 @@ package org.makson.guardbot.services;
 
 
 import lombok.RequiredArgsConstructor;
-import org.makson.guardbot.dto.GuardsmanInfoDto;
-import org.makson.guardbot.dto.RankDto;
+import org.makson.guardbot.dto.guardsman.GuardsmanInfoDto;
+import org.makson.guardbot.dto.rank.RankDto;
 import org.makson.guardbot.exceptions.GuardsmanAlreadyExistsException;
 import org.makson.guardbot.exceptions.GuardsmanNotFoundException;
 import org.makson.guardbot.exceptions.RankLimitReachedException;

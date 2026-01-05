@@ -1,6 +1,6 @@
 package org.makson.guardbot.mappers;
 
-import org.makson.guardbot.dto.DepartmentMemberResponseDto;
+import org.makson.guardbot.dto.department.DepartmentMemberResponseDto;
 import org.makson.guardbot.models.DepartmentMember;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

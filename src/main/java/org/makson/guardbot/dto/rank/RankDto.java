@@ -1,4 +1,4 @@
-package org.makson.guardbot.dto;
+package org.makson.guardbot.dto.rank;
 
 public record RankDto(
         int id,

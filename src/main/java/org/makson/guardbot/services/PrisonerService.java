@@ -1,7 +1,7 @@
 package org.makson.guardbot.services;
 
 import lombok.RequiredArgsConstructor;
-import org.makson.guardbot.dto.PrisonerDto;
+import org.makson.guardbot.dto.prison.PrisonerDto;
 import org.makson.guardbot.exceptions.PrisonerNotFoundException;
 import org.makson.guardbot.mappers.PrisonerMapper;
 import org.makson.guardbot.models.Prisoner;

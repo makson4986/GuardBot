@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.makson.guardbot.dto.LogDto;
+import org.makson.guardbot.dto.log.LogDto;
 import org.makson.guardbot.exceptions.*;
 import org.makson.guardbot.services.EmbedMessageService;
 

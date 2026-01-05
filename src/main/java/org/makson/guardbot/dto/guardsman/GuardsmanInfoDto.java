@@ -1,4 +1,4 @@
-package org.makson.guardbot.dto;
+package org.makson.guardbot.dto.guardsman;
 
 import java.time.LocalDate;
 import java.util.List;
