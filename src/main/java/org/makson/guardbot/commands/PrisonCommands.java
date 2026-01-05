@@ -23,7 +23,7 @@ public class PrisonCommands extends ApplicationCommand {
     private final EmbedMessageService embedMessageService;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
-    @JDASlashCommand(name = "prison-list", description = "Получить информацию о заключенных")
+    @JDASlashCommand(name = "prison-list", description = "Получение подробной информации о заключенных")
     public void onSlashGetPrisonList(GuildSlashEvent event) {
         event.deferReply().queue();
 
@@ -33,14 +33,14 @@ public class PrisonCommands extends ApplicationCommand {
         event.getHook().sendMessageEmbeds(answer).queue();
     }
 
-    @JDASlashCommand(name = "prison", subcommand = "info", description = "Получить информацию о заключенном")
+    @JDASlashCommand(name = "prison-info", description = "Получение подробной информации о заключенном")
     public void onSlashGetPrisonerInfo(
             GuildSlashEvent event,
-            @SlashOption(name = "username", description = "Имя заключенного") String username
+            @SlashOption(name = "prisoner", description = "Имя заключенного") String prisoner
     ) {
         event.deferReply().queue();
 
-        PrisonerDto infoPrisoner = prisonService.getInfoPrisoner(username);
+        PrisonerDto infoPrisoner = prisonService.getInfoPrisoner(prisoner);
         MessageEmbed answer = embedMessageService.createInfoPrisonerEmbed(infoPrisoner);
 
         event.getHook().sendMessageEmbeds(answer).queue();
@@ -52,7 +52,7 @@ public class PrisonCommands extends ApplicationCommand {
             GuildSlashEvent event,
             @SlashOption(name = "username", description = "Ник заключенного") String username,
             @SlashOption(name = "release-date", description = "Дата освобождения (в формате гггг-мм-дд)") String releaseDate,
-            @SlashOption(name = "prison-cell", description = "Тюремная камера") Integer prisonCell,
+            @SlashOption(name = "prison-cell", description = "Номер тюремной камеры") Integer prisonCell,
             @SlashOption(name = "reason", description = "Причина") String reason
     ) {
         event.deferReply().queue();
@@ -73,8 +73,8 @@ public class PrisonCommands extends ApplicationCommand {
     @JDASlashCommand(name = "prison-amend-release-date", description = "Изменить дату освобождения из тюрьмы")
     public void onSlashAmendReleaseDate(
             GuildSlashEvent event,
-            @SlashOption(name = "username", description = "Кому необходимо изменить срок") String username,
-            @SlashOption(name = "date", description = "Дата и время в формате гггг-мм-дд") String newDate) {
+            @SlashOption(name = "username", description = "Имя заключенного") String username,
+            @SlashOption(name = "date", description = "Новая дата освобождения (в формате гггг-мм-дд)") String newDate) {
 
         event.deferReply().queue();
 
@@ -83,7 +83,7 @@ public class PrisonCommands extends ApplicationCommand {
         event.getHook().sendMessage("Дата освобождения изменена").queue();
     }
 
-    @JDASlashCommand(name = "prison-free", description = "Освободить из тюрьмы")
+    @JDASlashCommand(name = "prison-free", description = "Освободить заключенного из тюрьмы")
     public void onSlashFree(
             GuildSlashEvent event,
             @SlashOption(name = "username", description = "Кого необходимо освободить из тюрьмы") String username) {

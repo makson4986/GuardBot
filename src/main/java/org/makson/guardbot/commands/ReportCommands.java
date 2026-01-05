@@ -38,7 +38,7 @@ public class ReportCommands extends ApplicationCommand {
     @JDASlashCommand(name = "report-create", description = "Создать отчет")
     public void onSlashCreateReport(
             GuildSlashEvent event,
-            @SlashOption(name = "usernames", description = "Ник(и) игрока(ов) предоставляющих отчет") String usernames,
+            @SlashOption(name = "usernames", description = "Ник(и) игрока(ов) подающего(щих) отчет") String usernames,
             @SlashOption(name = "type", description = "Сфера деятельности", autocomplete = ReportTypeAutocomplete.REPORT_TYPE_AUTOCOMPLETE_NAME) String type,
             @Nullable @SlashOption(name = "description", description = "Подробности") String description,
             @Nullable @SlashOption(name = "media", description = "Фото/видео доказательства") Message.Attachment attachment,
@@ -71,7 +71,7 @@ public class ReportCommands extends ApplicationCommand {
     @JDASlashCommand(name = "issue-report", description = "Выдать рапорт")
     public void onSlashIssueReport(
             GuildSlashEvent event,
-            @SlashOption(name = "usernames", description = "На кого рапорт") User user,
+            @SlashOption(name = "guardsman", description = "Имя гвардейца, которому выдать рапорт") User user,
             @SlashOption(name = "reason", description = "Причина нарушения") String reason,
             @SlashOption(name = "points", description = "Количество снимаемых баллов") int points) {
         event.deferReply().queue();

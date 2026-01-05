@@ -33,19 +33,17 @@ public class GuardsmanCommands extends ApplicationCommand {
     private final DiscordLogger logger;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
-    @JDASlashCommand(name = "guardsmen-list", description = "Список всех гвардейцев")
+    @JDASlashCommand(name = "guardsmen-list", description = "Получение списка всех гвардейцев")
     public void onSlashListGuardsmen(GuildSlashEvent event) {
         event.deferReply(false).queue();
         var allGuardsman = guardsmanService.getAllGuardsman();
         event.getHook().sendMessageEmbeds(replyMessageService.createAllInfoEmbed(allGuardsman)).queue();
     }
 
-    @JDASlashCommand(name = "guardsmen-info", description = "Получить подробную информацию")
+    @JDASlashCommand(name = "guardsmen-info", description = "Получение подробной информации о гвардейце")
     public void onSlashGetInfo(
             GuildSlashEvent event,
-            @Nullable
-            @SlashOption(name = "guardsman", description = "Информацию кого необходимо получить")
-            User user) {
+            @Nullable @SlashOption(name = "guardsman", description = "Имя гвардейца, информацию о котором необходимо получить") User user) {
 
         event.deferReply().queue();
         Member guardsman = defineMember(event, user);
@@ -61,10 +59,10 @@ public class GuardsmanCommands extends ApplicationCommand {
         event.getHook().sendMessageEmbeds(answer).queue();
     }
 
-    @JDASlashCommand(name = "guardsmen-hire", description = "Нанять")
+    @JDASlashCommand(name = "guardsmen-hire", description = "Нанять гвардейца")
     public void onSlashHireGuardsman(
             GuildSlashEvent event,
-            @SlashOption(name = "guardsman", description = "Кого необходимо нанять") User user
+            @SlashOption(name = "guardsman", description = "Имя гвардейца, которого необходимо нанять") User user
     ) {
         event.deferReply().queue();
 
@@ -81,10 +79,10 @@ public class GuardsmanCommands extends ApplicationCommand {
         event.getHook().sendMessage("Гвардеец был принят!").queue();
     }
 
-    @JDASlashCommand(name = "guardsmen-dismiss", description = "Уволить")
+    @JDASlashCommand(name = "guardsmen-dismiss", description = "Уволить гвардейца")
     public void onSlashDismissGuardsman(
             GuildSlashEvent event,
-            @SlashOption(name = "guardsman", description = "Кого необходимо уволить") User user
+            @SlashOption(name = "guardsman", description = "Имя гвардейца, которого необходимо уволить") User user
     ) {
         event.deferReply().queue();
 
@@ -101,7 +99,7 @@ public class GuardsmanCommands extends ApplicationCommand {
         event.getHook().sendMessage("Гвардеец " + user.getEffectiveName() + " уволен!").queue();
     }
 
-    @JDASlashCommand(name = "guardsmen-promote", description = "Повысить должность")
+    @JDASlashCommand(name = "guardsmen-promote", description = "Повысить должность гвардейцу на следующую в ранговой системе")
     public void onSlashPromoteGuardsman(
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого необходимо повысить") User user
@@ -116,7 +114,7 @@ public class GuardsmanCommands extends ApplicationCommand {
         event.getHook().sendMessage("Гвардеец был повышен").queue();
     }
 
-    @JDASlashCommand(name = "guardsmen-demote", description = "Понизить должность")
+    @JDASlashCommand(name = "guardsmen-demote", description = "Понизить должность гвардейцу на предыдущую в ранговой системе")
     public void onSlashDemoteGuardsman(
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого необходимо понизить") User user
@@ -149,7 +147,7 @@ public class GuardsmanCommands extends ApplicationCommand {
     @JDASlashCommand(name = "guardsmen-change-name", description = "Изменить имя")
     public void onSlashChangeName(
             GuildSlashEvent event,
-            @SlashOption(name = "new-name", description = "Новый ник, как в майнкрафте") String newName,
+            @SlashOption(name = "new-name", description = "Новый ник, как в minecraft") String newName,
             @Nullable @SlashOption(name = "guardsman", description = "Кому поменять ник") User user
     ) {
         event.deferReply().queue();

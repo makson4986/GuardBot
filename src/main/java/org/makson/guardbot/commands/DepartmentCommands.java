@@ -26,10 +26,10 @@ public class DepartmentCommands extends ApplicationCommand {
     private final EmbedMessageService embedMessageService;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
-    @JDASlashCommand(name = "department-info", description = "Получить информацию об отделе")
+    @JDASlashCommand(name = "department-info", description = "Получение подробной информации об отделе")
     public void onSlashGetInfoDepartment(
             GuildSlashEvent event,
-            @SlashOption(name = "name", description = "Выбери отдел", autocomplete = DepartmentAutocomplete.DEPARTMENT_AUTOCOMPLETE_NAME) String name) {
+            @SlashOption(name = "name", description = "Название отдела", autocomplete = DepartmentAutocomplete.DEPARTMENT_AUTOCOMPLETE_NAME) String name) {
         event.deferReply().queue();
 
         DepartmentInfoDto department = departmentService.getDepartmentByName(name);
@@ -38,12 +38,12 @@ public class DepartmentCommands extends ApplicationCommand {
         event.getHook().sendMessageEmbeds(departmentInfoEmbed).queue();
     }
 
-    @JDASlashCommand(name = "department-add-member", description = "Добавить в отдел")
+    @JDASlashCommand(name = "department-add-member", description = "Добавить гвардейца в отдел")
     public void onSlashAddToDepartment(
             GuildSlashEvent event,
             @SlashOption(name = "guardsman", description = "Кого добавить в отдел") User user,
-            @SlashOption(name = "department-name", description = "Выберите отдел", autocomplete = DepartmentAutocomplete.DEPARTMENT_AUTOCOMPLETE_NAME) String departmentName,
-            @SlashOption(name = "role", description = "Выберите роль", autocomplete = DepartmentRoleAutocomplete.DEPARTMENT_ROLE_AUTOCOMPLETE_NAME) String role
+            @SlashOption(name = "department-name", description = "В какой отдел необходимо добавить", autocomplete = DepartmentAutocomplete.DEPARTMENT_AUTOCOMPLETE_NAME) String departmentName,
+            @SlashOption(name = "role", description = "Роль в данном отделе", autocomplete = DepartmentRoleAutocomplete.DEPARTMENT_ROLE_AUTOCOMPLETE_NAME) String role
     ) {
         event.deferReply().queue();
 
@@ -77,11 +77,11 @@ public class DepartmentCommands extends ApplicationCommand {
         ).queue();
     }
 
-    @JDASlashCommand(name = "department-remove-member", description = "Удалить из отдела")
+    @JDASlashCommand(name = "department-remove-member", description = "Уволить гвардейца из отдела")
     public void onSlashDeleteFromDepartment(
             GuildSlashEvent event,
-            @SlashOption(name = "guardsman", description = "Кого удалить из отдела") User user,
-            @SlashOption(name = "department-name", description = "Выберите отдел", autocomplete = DepartmentAutocomplete.DEPARTMENT_AUTOCOMPLETE_NAME) String departmentName
+            @SlashOption(name = "guardsman", description = "Кого уволить из отдела") User user,
+            @SlashOption(name = "department-name", description = "Из какого отдела необходимо уволить", autocomplete = DepartmentAutocomplete.DEPARTMENT_AUTOCOMPLETE_NAME) String departmentName
     ) {
         event.deferReply().queue();
 
