@@ -14,11 +14,11 @@ public class ReactionSpecialReportService {
     private final GuardsmanService guardsmanService;
     private final ReportParser reportParser;
 
-    public void changeSpecialReport(Message message, boolean isSubtraction) {
+    public void changeSpecialReport(Message message, boolean isDeletion) {
         int DEFAULT_SPECIAL_REPORT_INCREMENT = 1;
         int quantity;
 
-        if (isSubtraction) {
+        if (isDeletion) {
             quantity = DEFAULT_SPECIAL_REPORT_INCREMENT * -1;
         } else {
             quantity = DEFAULT_SPECIAL_REPORT_INCREMENT;

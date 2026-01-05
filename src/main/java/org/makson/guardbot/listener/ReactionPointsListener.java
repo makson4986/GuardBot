@@ -13,11 +13,10 @@ import org.makson.guardbot.services.ReactionPointsService;
 import org.makson.guardbot.utils.DiscordLogger;
 
 import java.util.List;
-import java.util.Optional;
 
 @BService
 @RequiredArgsConstructor
-public class ReactionPointsListener {
+public class ReactionPointsListener implements ReactionListener {
     private final ReactionPointsService reactionPointsService;
     private final DiscordLogger logger;
 
@@ -41,7 +40,7 @@ public class ReactionPointsListener {
         Message message = event.retrieveMessage().complete();
         List<MessageReaction> reactions = message.getReactions();
 
-        if (isDuplication(reactions, isDeletion)) {
+        if (isDuplication(reactions, CONFIRMATION_REACTION, isDeletion)) {
             return;
         }
 
@@ -52,21 +51,5 @@ public class ReactionPointsListener {
                 null,
                 "The points have been changed"
         ));
-    }
-
-    private boolean isDuplication(List<MessageReaction> reactions, boolean isDeletion) {
-        final String confirmationReaction = "✅";
-        int numberReactionsWhenDeleting = 0;
-        int numberReactionsWhenAddition = 1;
-
-        Optional<MessageReaction> react = reactions.stream()
-                .filter(reaction -> reaction.getEmoji().getName().equals(confirmationReaction))
-                .findFirst();
-
-        if (isDeletion) {
-            return react.filter(messageReaction -> messageReaction.getCount() >= numberReactionsWhenDeleting).isPresent();
-        } else {
-            return react.filter(messageReaction -> messageReaction.getCount() > numberReactionsWhenAddition).isPresent();
-        }
     }
 }
