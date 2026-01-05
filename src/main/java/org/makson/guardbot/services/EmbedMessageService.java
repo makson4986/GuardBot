@@ -148,17 +148,7 @@ public class EmbedMessageService {
         return new EmbedBuilder()
                 .setTitle(LocalDateTime.now().toString())
                 .setColor(logColor)
-                .setDescription("""
-                        **Level:** %s
-                        **User:** %s
-                        **Commands:** %s
-                        **Description:** %s
-                        """.formatted(
-                        level,
-                        logDto.user(),
-                        "```" + logDto.command() + "```",
-                        "```" + logDto.description() + "```"
-                ))
+                .setDescription(createLogText(logDto, level))
                 .build();
     }
 
@@ -247,5 +237,27 @@ public class EmbedMessageService {
     private String changeDateFormat(LocalDate localDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return localDate.format(formatter);
+    }
+
+    private String createLogText(LogDto logDto, String level) {
+        String commandString;
+
+        if (logDto.command() != null) {
+            commandString = "**Command:** ```" + logDto.command() + "```";
+        } else {
+            commandString = "";
+        }
+
+        return """
+                **Level:** %s
+                **User:** %s
+                %s
+                **Description:** ```%s
+                """.formatted(
+                level,
+                logDto.user(),
+                commandString,
+                logDto.description() + "```"
+        );
     }
 }
