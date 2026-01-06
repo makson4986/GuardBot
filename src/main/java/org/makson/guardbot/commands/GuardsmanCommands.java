@@ -29,7 +29,7 @@ import java.util.List;
 public class GuardsmanCommands extends ApplicationCommand {
     private final GuardsmanService guardsmanService;
     private final RankService rankService;
-    private final EmbedMessageService replyMessageService;
+    private final EmbedMessageService embedMessageService;
     private final DiscordLogger logger;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
@@ -37,7 +37,7 @@ public class GuardsmanCommands extends ApplicationCommand {
     public void onSlashListGuardsmen(GuildSlashEvent event) {
         event.deferReply(false).queue();
         var allGuardsman = guardsmanService.getAllGuardsman();
-        event.getHook().sendMessageEmbeds(replyMessageService.createAllInfoEmbed(allGuardsman)).queue();
+        event.getHook().sendMessageEmbeds(embedMessageService.createAllInfoEmbed(allGuardsman)).queue();
     }
 
     @JDASlashCommand(name = "guardsmen-info", description = "Получение подробной информации о гвардейце")
@@ -49,12 +49,12 @@ public class GuardsmanCommands extends ApplicationCommand {
         Member guardsman = defineMember(event, user);
 
         if (guardsman == null) {
-            event.getHook().sendMessageEmbeds(replyMessageService.createErrorEmbed("Для получения информации данный гвардеец должен находится на сервере")).queue();
+            event.getHook().sendMessageEmbeds(embedMessageService.createErrorEmbed("Для получения информации данный гвардеец должен находится на сервере")).queue();
             return;
         }
 
         GuardsmanInfoDto guardsmanInfo = guardsmanService.getGuardsman(guardsman.getEffectiveName());
-        MessageEmbed answer = replyMessageService.createInfoEmbed(guardsmanInfo, guardsman.getColor());
+        MessageEmbed answer = embedMessageService.createInfoEmbed(guardsmanInfo, guardsman.getColor());
 
         event.getHook().sendMessageEmbeds(answer).queue();
     }
@@ -171,6 +171,16 @@ public class GuardsmanCommands extends ApplicationCommand {
         }
 
         return event.getMember();
+    }
+
+    @JDASlashCommand(name = "guardsmen-last-report", description = "Получение списка даты последних отчетов всех гвардейцев")
+    public void onSlash(GuildSlashEvent event) {
+        event.deferReply().queue();
+
+        List<GuardsmanInfoDto> allGuardsman = guardsmanService.getAllGuardsman();
+        MessageEmbed answer = embedMessageService.createLastReportsEmbed(allGuardsman);
+
+        event.getHook().sendMessageEmbeds(answer).queue();
     }
 
     private List<Role> getInitialRoles(Guild guild) {

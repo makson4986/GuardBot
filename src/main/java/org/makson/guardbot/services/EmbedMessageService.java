@@ -89,7 +89,7 @@ public class EmbedMessageService {
         if (guardsman.lastReport() == null) {
             lastReport = "Отсутствует";
         } else {
-            lastReport = guardsman.lastReport().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+            lastReport = changeDateFormat(guardsman.lastReport());
         }
 
         if (ADMIN_RANKS.contains(guardsman.rankName())) {
@@ -177,6 +177,30 @@ public class EmbedMessageService {
                         reportDto.reason(),
                         reportDto.points()
                 ))
+                .build();
+    }
+
+    public MessageEmbed createLastReportsEmbed(List<GuardsmanInfoDto> guardsmen) {
+        List<String> lastReports = guardsmen.stream()
+                .map(guardsman -> {
+                            String lastReport;
+
+                            if (guardsman.lastReport() == null) {
+                                lastReport = "Отсутствует";
+                            } else {
+                                lastReport = changeDateFormat(guardsman.lastReport());
+                            }
+
+                            return guardsman.name() + ": " + lastReport;
+                        }
+                )
+                .toList();
+
+
+        return new EmbedBuilder()
+                .setTitle("Последние отчеты")
+                .setColor(Color.BLUE)
+                .setDescription(String.join("\n", lastReports))
                 .build();
     }
 
