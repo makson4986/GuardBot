@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.makson.guardbot.dto.log.LogDto;
 import org.makson.guardbot.exceptions.*;
-import org.makson.guardbot.services.EmbedMessageService;
+import org.makson.guardbot.responses.LogResponse;
 
 import java.time.format.DateTimeParseException;
 
@@ -19,7 +19,7 @@ import java.time.format.DateTimeParseException;
 @RequiredArgsConstructor
 public class ExceptionHandler implements GlobalExceptionHandler {
     private final DiscordLogger logger;
-    private final EmbedMessageService embedMessageService;
+    private final LogResponse embedMessageService;
 
     @Override
     public void onException(@Nullable Event event, @NotNull Throwable throwable) {
@@ -53,13 +53,13 @@ public class ExceptionHandler implements GlobalExceptionHandler {
     }
 
     private void handleWarn(SlashCommandInteractionEvent event, Throwable throwable, String message) {
-        MessageEmbed answer = embedMessageService.createErrorEmbed(message);
+        MessageEmbed answer = embedMessageService.replyError(message);
         logger.warn(createLogDto(event, throwable));
         event.getHook().sendMessageEmbeds(answer).queue();
     }
 
     private void handleError(SlashCommandInteractionEvent event, Throwable throwable, String message) {
-        MessageEmbed answer = embedMessageService.createErrorEmbed(message);
+        MessageEmbed answer = embedMessageService.replyError(message);
         logger.error(createLogDto(event, throwable));
         event.getHook().sendMessageEmbeds(answer).queue();
     }

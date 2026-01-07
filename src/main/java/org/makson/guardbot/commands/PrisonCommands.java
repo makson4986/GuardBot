@@ -10,7 +10,7 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.makson.guardbot.dto.prison.PrisonerDto;
-import org.makson.guardbot.services.EmbedMessageService;
+import org.makson.guardbot.responses.PrisonResponses;
 import org.makson.guardbot.services.PrisonerService;
 
 import java.time.LocalDate;
@@ -20,16 +20,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PrisonCommands extends ApplicationCommand {
     private final PrisonerService prisonService;
-    private final EmbedMessageService embedMessageService;
+    private final PrisonResponses prisonResponses;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
     @JDASlashCommand(name = "prison-list", description = "Получение подробной информации о заключенных")
     public void onSlashGetPrisonList(GuildSlashEvent event) {
         event.deferReply().queue();
-
         List<PrisonerDto> prisoners = prisonService.getAllPrisoners();
-        MessageEmbed answer = embedMessageService.createInfoPrisonEmbed(prisoners);
-
+        MessageEmbed answer = prisonResponses.replyGetPrisonList(prisoners);
         event.getHook().sendMessageEmbeds(answer).queue();
     }
 
@@ -39,10 +37,8 @@ public class PrisonCommands extends ApplicationCommand {
             @SlashOption(name = "prisoner", description = "Имя заключенного") String prisoner
     ) {
         event.deferReply().queue();
-
         PrisonerDto infoPrisoner = prisonService.getInfoPrisoner(prisoner);
-        MessageEmbed answer = embedMessageService.createInfoPrisonerEmbed(infoPrisoner);
-
+        MessageEmbed answer = prisonResponses.replyPrisonerInfo(infoPrisoner);
         event.getHook().sendMessageEmbeds(answer).queue();
     }
 
@@ -66,8 +62,7 @@ public class PrisonCommands extends ApplicationCommand {
         );
 
         prisonService.savePrisoner(prisonerDto);
-
-        event.getHook().sendMessage("Игрок посажен в тюрьму!").queue();
+        event.getHook().sendMessage("Игрок ```" + username + "``` посажен в тюрьму!").queue();
     }
 
     @JDASlashCommand(name = "prison-amend-release-date", description = "Изменить дату освобождения из тюрьмы")
@@ -75,12 +70,9 @@ public class PrisonCommands extends ApplicationCommand {
             GuildSlashEvent event,
             @SlashOption(name = "username", description = "Имя заключенного") String username,
             @SlashOption(name = "date", description = "Новая дата освобождения (в формате гггг-мм-дд)") String newDate) {
-
         event.deferReply().queue();
-
         prisonService.changeReleaseDate(username, LocalDate.parse(newDate));
-
-        event.getHook().sendMessage("Дата освобождения изменена").queue();
+        event.getHook().sendMessage("Срок заключения игрока ```" + username + "``` был изменен").queue();
     }
 
     @JDASlashCommand(name = "prison-free", description = "Освободить заключенного из тюрьмы")
@@ -88,9 +80,7 @@ public class PrisonCommands extends ApplicationCommand {
             GuildSlashEvent event,
             @SlashOption(name = "username", description = "Кого необходимо освободить из тюрьмы") String username) {
         event.deferReply().queue();
-
         prisonService.deleteByName(username);
-
-        event.getHook().sendMessage("Игрок освобожден").queue();
+        event.getHook().sendMessage("Игрок ```" + username + "``` освобожден!").queue();
     }
 }

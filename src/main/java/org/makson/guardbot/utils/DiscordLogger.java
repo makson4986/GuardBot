@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import org.makson.guardbot.dto.log.LogDto;
 import org.makson.guardbot.exceptions.ChannelNotFoundException;
-import org.makson.guardbot.services.EmbedMessageService;
+import org.makson.guardbot.responses.LogResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,7 @@ public class DiscordLogger {
     private String guildId;
     @Value("${discord.log-channel-id}")
     private String logChannelId;
-    private final EmbedMessageService embedMessageService;
+    private final LogResponse embedMessageService;
 
     @BEventListener
     public void onGuildReady(GuildReadyEvent event) {
@@ -47,6 +47,6 @@ public class DiscordLogger {
             throw new ChannelNotFoundException("The channel with the specified ID was not found");
         }
 
-        logChannel.sendMessageEmbeds(embedMessageService.createLogEmbed(logDto, level)).queue();
+        logChannel.sendMessageEmbeds(embedMessageService.createLog(logDto, level)).queue();
     }
 }

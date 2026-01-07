@@ -14,7 +14,7 @@ import org.makson.guardbot.commands.autocompletes.ReportTypeAutocomplete;
 import org.makson.guardbot.dto.report.ReportDto;
 import org.makson.guardbot.dto.report.SpecialReportDto;
 import org.makson.guardbot.exceptions.ChannelNotFoundException;
-import org.makson.guardbot.services.EmbedMessageService;
+import org.makson.guardbot.responses.ReportResponses;
 import org.makson.guardbot.services.GuardsmanService;
 import org.makson.guardbot.services.ReportService;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,9 +30,10 @@ public class ReportCommands extends ApplicationCommand {
     private String specialReportChannelId;
     @Value("${discord.report-channel-id}")
     private String reportChannelId;
-    private final EmbedMessageService embedMessageService;
     private final ReportService reportService;
     private final GuardsmanService guardsmanService;
+    private final ReportResponses reportResponses;
+
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
     @JDASlashCommand(name = "report-create", description = "Создать отчет")
@@ -51,10 +52,8 @@ public class ReportCommands extends ApplicationCommand {
         }
 
         SpecialReportDto specialReportDto = new SpecialReportDto(List.of(usernames), type, description, mediaUrl, Optional.ofNullable(attachment));
-
         SpecialReportDto parsedReport = reportService.create(specialReportDto);
-
-        MessageEmbed reportEmbed = embedMessageService.createSpecialReportEmbed(parsedReport);
+        MessageEmbed reportEmbed = reportResponses.replyCreateReport(parsedReport);
 
         reportChannel.sendMessageEmbeds(reportEmbed).queue();
 
@@ -85,10 +84,9 @@ public class ReportCommands extends ApplicationCommand {
         }
 
         guardsmanService.changePoints(member.getEffectiveName(), points * -1);
-
-        MessageEmbed answer = embedMessageService.createReportEmbed(new ReportDto(member.getEffectiveName(), reason, points));
-
+        MessageEmbed answer = reportResponses.replyIssueReport(new ReportDto(member.getEffectiveName(), reason, points));
         reportChannel.sendMessageEmbeds(answer).queue();
+
         event.getHook().sendMessage("Рапорт отправлен!").queue();
     }
 }

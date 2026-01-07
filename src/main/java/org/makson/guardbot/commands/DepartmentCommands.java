@@ -14,16 +14,16 @@ import org.makson.guardbot.commands.autocompletes.DepartmentRoleAutocomplete;
 import org.makson.guardbot.dto.department.DepartmentInfoDto;
 import org.makson.guardbot.dto.department.DepartmentMemberCreatingDto;
 import org.makson.guardbot.models.DepartmentRole;
+import org.makson.guardbot.responses.DepartmentResponses;
 import org.makson.guardbot.services.DepartmentMembersService;
 import org.makson.guardbot.services.DepartmentService;
-import org.makson.guardbot.services.EmbedMessageService;
 
 @Command
 @RequiredArgsConstructor
 public class DepartmentCommands extends ApplicationCommand {
     private final DepartmentService departmentService;
     private final DepartmentMembersService departmentMembersService;
-    private final EmbedMessageService embedMessageService;
+    private final DepartmentResponses departmentResponses;
 
     @TopLevelSlashCommandData(scope = CommandScope.GUILD)
     @JDASlashCommand(name = "department-info", description = "Получение подробной информации об отделе")
@@ -33,7 +33,7 @@ public class DepartmentCommands extends ApplicationCommand {
         event.deferReply().queue();
 
         DepartmentInfoDto department = departmentService.getDepartmentByName(name);
-        MessageEmbed departmentInfoEmbed = embedMessageService.createDepartmentInfoEmbed(department);
+        MessageEmbed departmentInfoEmbed = departmentResponses.replyInfoDepartment(department);
 
         event.getHook().sendMessageEmbeds(departmentInfoEmbed).queue();
     }
@@ -48,7 +48,6 @@ public class DepartmentCommands extends ApplicationCommand {
         event.deferReply().queue();
 
         Member member = event.getGuild().retrieveMember(user).complete();
-
         DepartmentRole departmentRole;
 
         if (role.equals("Глава")) {
@@ -57,11 +56,7 @@ public class DepartmentCommands extends ApplicationCommand {
             departmentRole = DepartmentRole.EMPLOYEE;
         }
 
-        DepartmentMemberCreatingDto memberDto = new DepartmentMemberCreatingDto(
-                member.getEffectiveName(),
-                departmentName,
-                departmentRole
-        );
+        DepartmentMemberCreatingDto memberDto = new DepartmentMemberCreatingDto(member.getEffectiveName(), departmentName, departmentRole);
 
         departmentMembersService.addMemberToDepartment(memberDto);
         Guild guild = event.getGuild();
@@ -70,10 +65,7 @@ public class DepartmentCommands extends ApplicationCommand {
         guild.addRoleToMember(member, departmentRoleDs).queue();
 
         event.getHook().sendMessage(
-                "Гвардеец %s добавлен в отдел %s".formatted(
-                        member.getEffectiveName(),
-                        departmentName
-                )
+                "Гвардеец %s добавлен в отдел %s".formatted(member.getEffectiveName(), departmentName)
         ).queue();
     }
 
@@ -94,10 +86,7 @@ public class DepartmentCommands extends ApplicationCommand {
         guild.removeRoleFromMember(member, departmentRoleDs).queue();
 
         event.getHook().sendMessage(
-                "Гвардеец %s удален из отдела %s".formatted(
-                        member.getEffectiveName(),
-                        departmentName
-                )
+                "Гвардеец %s удален из отдела %s".formatted(member.getEffectiveName(), departmentName)
         ).queue();
     }
 }
