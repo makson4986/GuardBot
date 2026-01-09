@@ -32,11 +32,6 @@ public class ReactionPointsService {
 
     public void changePoints(List<MessageReaction> reactions, Message message, boolean isDeletion) {
         MessageEmbed embedMessage = message.getEmbeds().getFirst();
-
-        if (!isReport(embedMessage)) {
-            return;
-        }
-
         int points = calculatePoints(filterReactions(reactions), isDeletion);
 
         List<String> usernames = reportParser.parseUsernamesFromReport(embedMessage.getDescription()).stream()
@@ -68,10 +63,6 @@ public class ReactionPointsService {
             points = points * -1;
         }
         return points;
-    }
-
-    private boolean isReport(MessageEmbed message) {
-        return message.getTitle() != null && message.getTitle().startsWith("Отчет");
     }
 
     private List<MessageReaction> filterReactions(List<MessageReaction> reactions) {

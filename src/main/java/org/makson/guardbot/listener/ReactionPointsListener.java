@@ -2,54 +2,34 @@ package org.makson.guardbot.listener;
 
 import io.github.freya022.botcommands.api.core.annotations.BEventListener;
 import io.github.freya022.botcommands.api.core.service.annotations.BService;
-import lombok.RequiredArgsConstructor;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageReaction;
-import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
-import org.makson.guardbot.dto.log.LogDto;
 import org.makson.guardbot.services.ReactionPointsService;
 import org.makson.guardbot.utils.DiscordLogger;
 
-import java.util.List;
-
 @BService
-@RequiredArgsConstructor
-public class ReactionPointsListener implements ReactionListener {
+public class ReactionPointsListener extends BaseReactionListener {
     private final ReactionPointsService reactionPointsService;
-    private final DiscordLogger logger;
+
+    public ReactionPointsListener(DiscordLogger logger, ReactionPointsService reactionPointsService) {
+        super(logger);
+        this.reactionPointsService = reactionPointsService;
+    }
 
     @BEventListener
     public void addPoints(MessageReactionAddEvent event) {
-        changePoints(event, false);
+        processReaction(event, false, "✅",
+                message -> reactionPointsService.changePoints(message.getReactions(), message, false));
     }
 
     @BEventListener
     public void removePoints(MessageReactionRemoveEvent event) {
-        changePoints(event, true);
+        processReaction(event, true, "✅",
+                message -> reactionPointsService.changePoints(message.getReactions(), message, true));
     }
 
-    private void changePoints(GenericMessageReactionEvent event, boolean isDeletion) {
-        final String CONFIRMATION_REACTION = "✅";
-
-        if (!event.getEmoji().getName().equals(CONFIRMATION_REACTION)) {
-            return;
-        }
-
-        Message message = event.retrieveMessage().complete();
-        List<MessageReaction> reactions = message.getReactions();
-
-        if (isDuplication(reactions, CONFIRMATION_REACTION, isDeletion)) {
-            return;
-        }
-
-        reactionPointsService.changePoints(reactions, message, isDeletion);
-
-        logger.info(new LogDto(
-                event.retrieveUser().complete(),
-                null,
-                "The points have been changed"
-        ));
+    @Override
+    protected String getSuccessMessage() {
+        return "The points have been changed";
     }
 }
