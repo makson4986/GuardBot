@@ -78,6 +78,7 @@ public class GuarCallButtonListener {
             return;
         }
 
+        event.deferReply().queue();
         GuardCallDto guardCallDto;
 
         try {
@@ -102,6 +103,8 @@ public class GuarCallButtonListener {
                         )
                 )
                 .queue();
+
+        event.getHook().deleteOriginal().queue();
     }
 
     private TextChannel getChannelForGuardCall(ModalInteractionEvent event) {
