@@ -17,7 +17,7 @@ public class DiscordLogger {
     private Guild guild;
     @Value("${discord.guild-id}")
     private String guildId;
-    @Value("${discord.log-channel-id}")
+    @Value("${discord.channels-id.log}")
     private String logChannelId;
     private final LogResponse embedMessageService;
 

@@ -26,7 +26,7 @@ import java.util.Collections;
 public class GuarCallButtonListener {
     @Value("${discord.guild-id}")
     private String guildId;
-    @Value("${discord.guard-call-channel-id}")
+    @Value("${discord.channels-id.guard-call}")
     private String guardCallChannelId;
     @Value("${discord.roles.core-protect}")
     private String coreProtectRoleId;

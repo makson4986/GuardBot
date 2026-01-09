@@ -26,9 +26,9 @@ import java.util.Optional;
 @Command
 @RequiredArgsConstructor
 public class ReportCommands extends ApplicationCommand {
-    @Value("${discord.special-report-channel-id}")
+    @Value("${discord.channels-id.special-report}")
     private String specialReportChannelId;
-    @Value("${discord.report-channel-id}")
+    @Value("${discord.channels-id.report}")
     private String reportChannelId;
     private final ReportService reportService;
     private final GuardsmanService guardsmanService;

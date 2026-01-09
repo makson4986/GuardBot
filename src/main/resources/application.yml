@@ -8,10 +8,17 @@ spring:
     change-log: classpath:/db/changelog/db.changelog-master.yml
 discord:
   token: ${DISCORD_TOKEN}
-  special-report-channel-id: ${DISCORD_SPECIAL_REPORT_CHANNEL_ID}
-  log-channel-id: ${DISCORD_LOG_CHANNEL_ID}
-  report-channel-id: ${DISCORD_REPORT_CHANNEL_ID}
   guild-id: ${DISCORD_GUILD_ID}
+  roles:
+    core-protect:  ${DISCORD_CORE_PROTECT_ROLE}
+    agent_guard:  ${DISCORD_AGENT_GUARD_ROLE}
+  channels-id:
+    special-report: ${DISCORD_SPECIAL_REPORT_CHANNEL_ID}
+    log: ${DISCORD_LOG_CHANNEL_ID}
+    guard-call: ${DISCORD_GUARD_CALL_CHANNEL_ID}
+    report: ${DISCORD_REPORT_CHANNEL_ID}
 botcommands:
   core:
     packages: org.makson.guardbot
+  modals:
+    enable: false
