@@ -31,7 +31,6 @@ import java.util.List;
 public class GuardsmanOpCommands extends ApplicationCommand {
     private final GuardsmanService guardsmanService;
     private final RankService rankService;
-    private final LogResponse embedMessageService;
     private final DiscordLogger logger;
 
 

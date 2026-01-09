@@ -20,12 +20,12 @@ public class ReactionSpecialReportListener implements ReactionListener {
     private final ReactionSpecialReportService reactionSpecialReportService;
     private final DiscordLogger logger;
 
-    @BEventListener(mode = BEventListener.RunMode.ASYNC)
+    @BEventListener
     public void addSpecialReport(MessageReactionAddEvent event) {
         changeSpecialReport(event, false);
     }
 
-    @BEventListener(mode = BEventListener.RunMode.ASYNC)
+    @BEventListener
     public void removeSpecialReport(MessageReactionRemoveEvent event) {
         changeSpecialReport(event, true);
     }

@@ -34,7 +34,7 @@ public class ExceptionHandler implements GlobalExceptionHandler {
             case ReportParseException _ -> handleWarn((SlashCommandInteractionEvent) event, throwable, "Ошибка при формировании отчета, проверьте данные");
             case PrisonerNotFoundException _ -> handleWarn((SlashCommandInteractionEvent) event, throwable, "Заключенный не найден");
             case DateTimeParseException _ -> handleWarn((SlashCommandInteractionEvent) event, throwable, "Неверный формат даты");
-            case RoleNotFoundException _ -> handleWarn((SlashCommandInteractionEvent) event, throwable, "Внутренняя ошибка сервера");
+            case RoleNotFoundException _ -> handleWarn((SlashCommandInteractionEvent) event, throwable, "Ошибка настройки бота");
             case DepartmentMemberAlreadyExistsException _ -> handleWarn((SlashCommandInteractionEvent) event, throwable, "Гвардеец уже добавлен в отдел");
             case RankLimitReachedException _ -> handleWarn((SlashCommandInteractionEvent) event, throwable, "Гвардеец достиг максимально/минимально допустимого ранга");
             case IllegalArgumentException _ -> handleWarn((SlashCommandInteractionEvent) event, throwable, "Неверной имя, укажите через пинг");

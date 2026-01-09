@@ -8,6 +8,9 @@ import io.github.freya022.botcommands.api.commands.application.slash.annotations
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.SlashOption;
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.TopLevelSlashCommandData;
 import lombok.RequiredArgsConstructor;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.buttons.Button;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.makson.guardbot.commands.autocompletes.ReportTypeAutocomplete;
@@ -20,6 +23,7 @@ import org.makson.guardbot.services.ReportService;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.Nullable;
+import javax.swing.*;
 import java.util.List;
 import java.util.Optional;
 

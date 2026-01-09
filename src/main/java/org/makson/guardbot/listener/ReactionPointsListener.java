@@ -20,12 +20,12 @@ public class ReactionPointsListener implements ReactionListener {
     private final ReactionPointsService reactionPointsService;
     private final DiscordLogger logger;
 
-    @BEventListener(mode = BEventListener.RunMode.ASYNC)
+    @BEventListener
     public void addPoints(MessageReactionAddEvent event) {
         changePoints(event, false);
     }
 
-    @BEventListener(mode = BEventListener.RunMode.ASYNC)
+    @BEventListener
     public void removePoints(MessageReactionRemoveEvent event) {
         changePoints(event, true);
     }
