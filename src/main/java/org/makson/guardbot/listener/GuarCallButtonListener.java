@@ -105,13 +105,13 @@ public class GuarCallButtonListener {
     }
 
     private TextChannel getChannelForGuardCall(ModalInteractionEvent event) {
-        Guild guild = event.getJDA().getGuildById("1446915947926523918");
+        Guild guild = event.getJDA().getGuildById(guildId);
 
         if (guild == null) {
             throw new GuildNotFoundException("An invalid ID was specified or the bot was not added to the guild");
         }
 
-        TextChannel channel = guild.getTextChannelById("1457685417670475930");
+        TextChannel channel = guild.getTextChannelById(guardCallChannelId);
 
         if (channel == null) {
             throw new ChannelNotFoundException("The channel with the specified ID was not found");

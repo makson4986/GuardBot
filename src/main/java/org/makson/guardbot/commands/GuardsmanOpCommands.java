@@ -16,7 +16,6 @@ import org.makson.guardbot.dto.log.LogDto;
 import org.makson.guardbot.dto.rank.RankDto;
 import org.makson.guardbot.exceptions.GuardsmanNotFoundException;
 import org.makson.guardbot.exceptions.RoleNotFoundException;
-import org.makson.guardbot.responses.LogResponse;
 import org.makson.guardbot.services.GuardsmanService;
 import org.makson.guardbot.services.RankService;
 import org.makson.guardbot.utils.DiscordLogger;
