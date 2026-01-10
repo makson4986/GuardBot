@@ -19,7 +19,7 @@ public class GuardCallResponses {
                         3. Причина вызова (PvP, CoreProtect, RP или другое)
                         4. Кратко опишите причину вызова
                         """)
-                .setColor(0xFF0000)
+                .setColor(new Color(207, 181, 59))
                 .setFooter("За ложный вызов предусмотрен штраф в размере 10 АР!")
                 .build();
     }
@@ -38,7 +38,7 @@ public class GuardCallResponses {
                         guardCallDto.reason(),
                         guardCallDto.description()
                 ))
-                .setColor(new Color(83, 197, 14))
+                .setColor(new Color(207, 181, 59))
                 .build();
     }
 
@@ -46,7 +46,7 @@ public class GuardCallResponses {
         return new EmbedBuilder()
                 .setTitle("**Вызов отклонен **" + user.getEffectiveName())
                 .setDescription(oldEmbed.getDescription())
-                .setColor(oldEmbed.getColor())
+                .setColor(new Color(75, 3, 3))
                 .build();
     }
 
@@ -54,7 +54,7 @@ public class GuardCallResponses {
         return new EmbedBuilder()
                 .setTitle("**Вызов принят **" + user.getEffectiveName())
                 .setDescription(oldEmbed.getDescription())
-                .setColor(oldEmbed.getColor())
+                .setColor(new Color(4, 70, 3))
                 .build();
     }
 }
