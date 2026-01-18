@@ -51,7 +51,7 @@ public class GuardsmanOpCommands extends ApplicationCommand {
         guild.modifyMemberRoles(member, getInitialRoles(guild), Collections.emptyList()).complete();
         guardsmanService.saveGuardsman(member.getEffectiveName());
 
-        event.getHook().sendMessage("Гвардеец" + member.getEffectiveName() + "был принят!").queue();
+        event.getHook().sendMessage("Гвардеец " + member.getEffectiveName() + " был принят!").queue();
     }
 
     @JDASlashCommand(name = "guardsmen-dismiss", description = "Уволить гвардейца")

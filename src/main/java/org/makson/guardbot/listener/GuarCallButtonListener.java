@@ -12,11 +12,13 @@ import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.modals.Modal;
 import org.makson.guardbot.dto.guardsman.GuardCallDto;
+import org.makson.guardbot.dto.log.LogDto;
 import org.makson.guardbot.exceptions.ChannelNotFoundException;
 import org.makson.guardbot.exceptions.GuildNotFoundException;
 import org.makson.guardbot.exceptions.ModalFieldIsEmptyException;
 import org.makson.guardbot.responses.GuardCallResponses;
 import org.makson.guardbot.services.GuardCallService;
+import org.makson.guardbot.utils.DiscordLogger;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Collections;
@@ -34,7 +36,7 @@ public class GuarCallButtonListener {
     private String agentGuardRoleId;
     private final GuardCallResponses guardCallResponses;
     private final GuardCallService guardCallService;
-
+    private final DiscordLogger logger;
 
     @BEventListener
     public void onGuardCallButton(ButtonInteractionEvent event) {
@@ -104,6 +106,7 @@ public class GuarCallButtonListener {
                 )
                 .queue();
 
+        logger.info(new LogDto(event.getUser(), null, "Called the guard"));
         event.getHook().deleteOriginal().queue();
     }
 

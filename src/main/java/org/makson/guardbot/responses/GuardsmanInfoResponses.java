@@ -8,7 +8,6 @@ import org.makson.guardbot.dto.guardsman.GuardsmanInfoDto;
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @BService
@@ -26,15 +25,23 @@ public class GuardsmanInfoResponses {
     }
 
     public MessageEmbed replyGetInfo(GuardsmanInfoDto guardsman, Color color) {
-        final Set<String> ADMIN_RANKS = Set.of("Зам. главы", "Глава гвардии");
+        String headGuard = "Глава гвардии";
+        String deputyHeadGuard = "Зам. главы";
+
         String faceIconUrl = "https://mc-heads.net/avatar/%s/128";
         String description;
 
-        if (ADMIN_RANKS.contains(guardsman.rankName())) {
+        if (guardsman.rankName().equals(headGuard)) {
             description = getAdminInfoDescription().formatted(
                     guardsman.rankName(),
                     getDepartment(guardsman.departmentsName()),
                     guardsman.description()
+            );
+        } else if (guardsman.rankName().equals(deputyHeadGuard)) {
+            description = getAdminInfoDescription().formatted(
+                    guardsman.rankName(),
+                    getDepartment(guardsman.departmentsName()),
+                    "Вес " + guardsman.points() + "кг"
             );
         } else {
             description = getRankedInfoDescription().formatted(

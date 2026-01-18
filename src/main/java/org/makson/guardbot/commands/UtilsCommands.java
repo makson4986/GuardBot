@@ -17,7 +17,7 @@ import org.makson.guardbot.responses.GuardCallResponses;
 public class UtilsCommands extends ApplicationCommand {
     private final GuardCallResponses guardCallResponses;
 
-    @JDASlashCommand(name = "create-guard-call-form")
+    @JDASlashCommand(name = "create-guard-call-form", description = "Создать форму вызова гвардии")
     public void onSlashCreateGuardCallForm(
             GuildSlashEvent event,
             @SlashOption(name = "channel", description = "В каком канале необходимо создать форму вызова") TextChannel channel
